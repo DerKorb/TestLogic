@@ -12,6 +12,7 @@ initClass = function(name, params) {
     return constructor;
 }
 
+
 Admiral = initClass("admiral",
 {
     move: {target: "enemy unit", callback: function(data){

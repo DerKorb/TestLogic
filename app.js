@@ -2,7 +2,6 @@
 /**
  * Module dependencies.
  */
-
 var express = require('express');
 var routes = require('./routes');
 var user = require('./routes/user');
@@ -29,12 +28,11 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-app.get('/init', interface.init);
-app.get('/interface/:type/:id/:command', interface.interface);
-app.get('/interface/:type/:command', interface.interface);
-
 app.get('/', routes.index);
 app.get('/users', user.list);
+
+var gameserver = require("./gameserver/server.js");
+gameserver.start(app);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

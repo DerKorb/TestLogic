@@ -25,8 +25,15 @@ Admiral = initClass("admiral", {
     }
 });
 
+Game = initClass("game", {
+	admirals: [],
+	interface: {
+		start: function() {
 
-var game = {admirals: {1: new Admiral()}};
+		}
+	}
+});
+
 
 exports.init = function(req, res)
 {
