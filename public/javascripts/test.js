@@ -19,10 +19,19 @@ Admiral = initClass("admiral",
     }}
 });
 
+a = new constructors["admiral"]();
+objects = {};
 $(function()
 {
     $.get("/init", function(data) {
-        console.log(data);
+        for(key in data) {
+            if (constructors[data[key].type])
+            {
+                if (!objects[data[key].type])
+                    objects[data[key].type] = [];
+                objects[data[key].type].push(new constructors[data[key].type](data[key]));
+            }
+        };
     });
 });
 

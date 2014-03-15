@@ -1,6 +1,7 @@
 initClass = function(name, params) {
     var constructor = function() {
         this.type = name;
+        this.id = Math.random();
         for(key in params)
         {
             console.log(key);
@@ -25,7 +26,7 @@ Admiral = initClass("admiral", {
 });
 
 
-var game = {a: new Admiral()};
+var game = {admirals: {1: new Admiral()}};
 
 exports.init = function(req, res)
 {
