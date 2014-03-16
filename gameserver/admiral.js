@@ -1,4 +1,5 @@
-exports.Admiral = require("./interface").initClass("admiral", function() {
+exports.Admiral = function() {
+	this.type = "Admiral";
 	this.position = {
 		x: 0,
 		y: 0,
@@ -8,4 +9,5 @@ exports.Admiral = require("./interface").initClass("admiral", function() {
 	{
 		return {ok: 0};
 	}
-});
+	require("./interface").networkObject.call(this, arguments);
+};

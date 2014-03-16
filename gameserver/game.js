@@ -3,7 +3,8 @@ var Player = require("./player").Player;
 exports.Admiral = Admiral;
 exports.Player = Player;
 
-exports.Game = require("./interface").initClass("game", function(name) {
+exports.Game = function(name) {
+	this.type = "Lobby";
 	var admirals = [];
 	var players = [];
 	this.name = name ? name : "game without a name";
@@ -25,4 +26,5 @@ exports.Game = require("./interface").initClass("game", function(name) {
 	this.listPlayers = function() {
 		return players.map(function(a) {return a.name});
 	}
-});
+	require("./server").networkObject.call(this, arguments);
+};

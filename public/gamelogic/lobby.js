@@ -1,10 +1,10 @@
 Lobby = function(name)
 {
 	this.games = [];
-	this.type = "lobby";
+	this.type = "Lobby";
 	this.list = {callback: function(games){
 		$("#game_list").empty();
-		for (g in this.games)
+		for (g in games)
 		{
 			$("<li>").appendTo("#game_list").text(games[g].id+": "+games[g].name);
 			console.log(games[g].id+"\t"+games[g].name);

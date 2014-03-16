@@ -1,6 +1,6 @@
 Game = function(_data)
 {
-	this.type = "game";
+	this.type = "Game";
 	this.name = _data.name;
 	this.id = _data.id;
 	this.players = [];

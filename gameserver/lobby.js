@@ -3,7 +3,9 @@ var Player = require("./player").Player;
 
 var users = {"DerKorb": "asdfg"};
 
-exports.Lobby = require("./interface").initClass("lobby", function() {
+exports.Lobby = function() {
+	this.type = "Lobby";
+	this.singleton = true;
 	var games = [];
 	var players = {};
 	var connectedPlayers = {};
@@ -56,7 +58,7 @@ exports.Lobby = require("./interface").initClass("lobby", function() {
 		{
 			gamelist.push({name: games[g].name, id: games[g].id, players: games[g].listPlayers()});
 		}
-		console.log(gamelist);
 		return gamelist;
 	};
-});
+	require("./server").networkObject.call(this, arguments);
+};
