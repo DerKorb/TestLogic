@@ -1,0 +1,12 @@
+extends layout
+
+block head
+  script(src="/javascripts/jquery.js")
+  script(src="/javascripts/test.js")
+  script(src="/gamelogic/lobby.js")
+  script(src="/gamelogic/game.js")
+
+block content
+  h1 Game lobby
+  button(action="/lobby/create") create new game
+  ul#game_list

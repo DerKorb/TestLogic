@@ -1,33 +1,28 @@
+var ids = {};
+var pools = {};
+var interface = {};
+
 exports.initClass = function(name, class_descriptor_function) {
-	var injected_scope = {};
-	var constructor = class_descriptor_function;
-	console.log();
-
-
-	/*function() {
+	ids[name] = 1;
+	pools[name] = {};
+	return function() {
+		this.id = ids[name]++;
 		this.type = name;
-		this.id = Math.random();
-		for(key in params)
-		{
-			console.log(key);
-			this[key] = params[key];
-		}
-	}*/
-	return constructor;
+		class_descriptor_function.apply(this, arguments);
+		pools[name][this.id] = this;
+	}
 }
-
-exports.init = function(req, res)
-{
-	res.send(game);
-};
 
 exports.interface = function(req, res)
 {
-	if (!req.params.type == "admiral")
+	if (!pools[req.params.type])
 		return res.send({error: "unknown interface"});
 
-	if (!a.interface[req.params.command])
-		return res.send({error: "unknown command: "+req.params.command});
+	if (!pools[req.params.type][1].interface[req.params.command])
+		return res.send({error: "unknown command"});
+
+	if (!req.params.id)
+		return res.send(pools[req.params.type][1][req.params.command].call(null,req.query));
 
 	res.send(a.interface[req.params.command]());
 };

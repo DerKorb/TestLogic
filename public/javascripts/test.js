@@ -1,30 +1,41 @@
 var constructors = {};
-
-initClass = function(name, params) {
+var lobby;
+initClass = function(name, class_descriptor_function) {
     var constructor = function() {
         this.type = name;
-        for(key in params)
-            this[key] = function(data) {
-                $.get("/interface/"+this.type+"/"+key, data, params[key].callback);
-            };
+	    var _callbacks = {}, _data = {};
+	    class_descriptor_function.apply(this, arguments);
+	    for(key in this)
+	    {
+		    _callbacks[key] = this[key].callback;
+		    _data[key] = this[key.data];
+	        if (_callbacks[key])
+	        {
+		        this[key] = function()
+		        {
+			        $.get.apply(null, ["/interface/"+this.type+"/"+this.key, arguments[0], this.callback]);
+		        }.bind({key: key, callback: _callbacks[key], type: name});
+	        }
+	    }
+	    //console.log(_callbacks, this);
     }
     constructors[name] = constructor;
     return constructor;
 }
 
-
-Admiral = initClass("admiral",
-{
-    move: {target: "enemy unit", callback: function(data){
-        console.log(data);
-    }}
-});
-
-a = new constructors["admiral"]();
-objects = {};
 $(function()
 {
-    $.get("/init", function(data) {
+	objects = {};
+	lobby = new Lobby();
+	lobby.list();
+
+	/*$("button").click(function(button)
+	{
+		$.get("/interface"+$(button.target).attr("action"), function(result) {
+			console.log(result);
+		});
+	});*/
+    /*$.get("/init", function(data) {
         for(key in data) {
             if (constructors[data[key].type])
             {
@@ -33,6 +44,6 @@ $(function()
                 objects[data[key].type].push(new constructors[data[key].type](data[key]));
             }
         };
-    });
+    });*/
 });
 
