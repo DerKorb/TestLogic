@@ -17,7 +17,12 @@ initClass = function(name, class_descriptor_function) {
 		        }.bind({key: key, callback: _callbacks[key], type: name});
 	        }
 	    }
-	    //console.log(_callbacks, this);
+	    this.help = function() {
+		    $.get.apply(null, ["/interface/"+this.type+"/help", arguments[0], function(help)
+		    {
+			   console.log(help);
+		    }]);
+	    }
     }
     constructors[name] = constructor;
     return constructor;

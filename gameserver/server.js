@@ -1,4 +1,5 @@
 interface = require("./interface");
+io = require('socket.io').listen(1337);
 Game = require("./game").Game;
 Lobby = require("./lobby").Lobby;
 
