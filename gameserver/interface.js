@@ -21,6 +21,10 @@ exports.interface = function(data)
 	if (!data.id)
 		data.id = 1;
 
+	if (!data.query)
+		data.query = {};
+	data.query.socketId = data.socketId;
+
 	if (!pools[data.type][data.id])
 		return res.send({error: "object does not exist"});
 

@@ -1,6 +1,7 @@
 Lobby = initClass("lobby", function()
 {
 	this.list = {callback: function(games){
+		console.log(games);
 		$("#game_list").empty();
 		for (g in games)
 		{

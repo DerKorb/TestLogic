@@ -1,5 +1,7 @@
 var Admiral = require("./admiral").Admiral;
+var Player = require("./player").Player;
 exports.Admiral = Admiral;
+exports.Player = Player;
 
 exports.Game = require("./interface").initClass("game", function(name) {
 	var admirals = [];
@@ -16,7 +18,11 @@ exports.Game = require("./interface").initClass("game", function(name) {
 		}
 	}
 
-	this.join = function() {
-		players.push();
+	this.join = function(player) {
+		players.push(player);
+	}
+
+	this.listPlayers = function() {
+		return players.map(function(a) {return a.name});
 	}
 });
