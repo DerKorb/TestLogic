@@ -1,6 +1,6 @@
 var constructors = {};
 var lobby, game;
-var initClass = function(name, class_descriptor_function) {
+/*var initClass2 = function(name, class_descriptor_function) {
     var constructor = function() {
         this.type = name;
 	    this._callbacks = {};
@@ -35,4 +35,4 @@ var help = function() {
 	console.log("objects:");
 	console.log("objects:");
 
-}
+}*/

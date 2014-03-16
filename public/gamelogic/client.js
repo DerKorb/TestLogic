@@ -15,12 +15,35 @@ var Client = function()
 			console.log(error.type+"::"+error.command+" - "+error.message);
 		});
 		socket.on("result", function(data) {
-			console.log(data);
 			if (that[data.type]._callbacks[data.command])
 				that[data.type]._callbacks[data.command](data.result);
 
 		});
 		this._socket = socket;
+	}
+
+	this.networkObject = function() {
+		this._callbacks = {};
+		var _data = {};
+		for(key in this)
+		{
+			if (!this[key] || !this[key].callback)
+				continue;
+			this._callbacks[key] = this[key].callback;
+			_data[key] = this[key.data];
+			if (this._callbacks[key])
+			{
+				this[key] = function()
+				{
+					var data = {
+						type: this.type,
+						command: this.key,
+						query: arguments[0]
+					}
+					client._socket.emit("interface", data);
+				}.bind({key: key, callback: this._callbacks[key], type: this.type});
+			}
+		}
 	}
 
 	this._socket = socket;

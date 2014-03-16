@@ -1,5 +1,6 @@
-Game = initClass("game", function(_data)
+Game = function(_data)
 {
+	this.type = "game";
 	this.name = _data.name;
 	this.id = _data.id;
 	this.players = [];
@@ -10,4 +11,5 @@ Game = initClass("game", function(_data)
 	this.join = {callback: function(status) {
 
 	}};
-});
+	client.networkObject.call(this, arguments);
+};

@@ -16,7 +16,7 @@ exports.initClass = function(name, class_descriptor_function) {
 exports.interface = function(data)
 {
 	if (!pools[data.type])
-		return res.send({error: "unknown interface"});
+		return {error: "unknown interface"};
 
 	if (!data.id)
 		data.id = 1;
@@ -26,10 +26,10 @@ exports.interface = function(data)
 	data.query.socketId = data.socketId;
 
 	if (!pools[data.type][data.id])
-		return res.send({error: "object does not exist"});
+		return {error: "object does not exist"};
 
 	if (!pools[data.type][data.id].interface[data.command])
-		return res.send({error: "unknown command"});
+		return {error: "unknown command"};
 
 	return pools[data.type][data.id][data.command].call(null,data.query);
 };
