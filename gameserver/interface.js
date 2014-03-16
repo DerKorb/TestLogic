@@ -18,14 +18,14 @@ exports.interface = function(data)
 	if (!pools[data.type])
 		return res.send({error: "unknown interface"});
 
-	if (!pools[data.type][1].interface[data.command])
+	if (!data.id)
+		data.id = 1;
+
+	if (!pools[data.type][data.id])
+		return res.send({error: "object does not exist"});
+
+	if (!pools[data.type][data.id].interface[data.command])
 		return res.send({error: "unknown command"});
 
-	if (!data.id)
-	{
-		result = pools[data.type][1][data.command].call(null,data.query);
-		return result;
-	}
-
-	//res.send(a.interface[req.params.command]());
+	return pools[data.type][data.id][data.command].call(null,data.query);
 };

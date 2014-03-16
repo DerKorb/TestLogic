@@ -1,9 +1,6 @@
 Lobby = initClass("lobby", function()
 {
 	this.list = {callback: function(games){
-		if (games.error)
-			return;
-
 		$("#game_list").empty();
 		for (g in games)
 		{
@@ -14,9 +11,6 @@ Lobby = initClass("lobby", function()
 	}};
 
 	this.create = {callback: function(_game) {
-		if (_game.error)
-			return console.log(_game.error);
-
 		game = new Game(_game);
 	}};
 

@@ -1,5 +1,5 @@
 interface = require("./interface");
-io = require('socket.io').listen(1337, {log: false});
+io = require('socket.io').listen(1337, {log: true});
 Game = require("./game").Game;
 Lobby = require("./lobby").Lobby;
 
@@ -10,8 +10,10 @@ exports.start = function(_app)
 	io.sockets.on("connection", function(socket) {
 		socket.emit("message", "connected");
 		socket.on("interface", function(data) {
-			console.log("check");
-			io.emit("message", interface.interface(data));
+			if (data.error)
+				return socket.emit("error", {type: data.type, command: data.command, id: data.id, message: data.error});
+
+			socket.emit("result", {type: data.type, command: data.command, id: data.id, result: interface.interface(data)});
 		});
 	});
 
