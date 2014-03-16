@@ -35,6 +35,7 @@ connect_client = function(socket) {
 			return socket.emit("message", {type: data.type, command: data.command, id: data.id, message: result.message});
 		}
 		socket.emit("result", {type: data.type, command: data.command, id: data.id, result: result});
+		socket.emit("object", this.lobby);
 	});
 	socket.on("disconnect", function() {
 		lobby.logout(socket.socketId);
