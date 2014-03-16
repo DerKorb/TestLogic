@@ -20,6 +20,8 @@ Lobby = initClass("lobby", function()
 		game = new Game(_game);
 	}};
 
+	this.update = {}
+
 	this.login = {callback: function(result) {
 		console.log(result);
 	}};

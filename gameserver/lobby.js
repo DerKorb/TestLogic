@@ -5,7 +5,7 @@ var Game = require("./game").Game;
 exports.Lobby = require("./interface").initClass("lobby", function() {
 	var games = [];
 	this.interface = {
-		list: "start a new game",
+		list: "show existing games",
 		login: "login using your user data",
 		create: "create a new game"
 	};

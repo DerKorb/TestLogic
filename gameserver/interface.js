@@ -13,19 +13,18 @@ exports.initClass = function(name, class_descriptor_function) {
 	}
 }
 
-exports.interface = function(req, res)
+exports.interface = function(data)
 {
-	if (!pools[req.params.type])
+	if (!pools[data.type])
 		return res.send({error: "unknown interface"});
 
-	if (!pools[req.params.type][1].interface[req.params.command])
+	if (!pools[data.type][1].interface[data.command])
 		return res.send({error: "unknown command"});
 
-	req.query.user = "DerKorb";
-	if (!req.params.id)
+	if (!data.id)
 	{
-		result = pools[req.params.type][1][req.params.command].call(null,req.query);
-		return res.send(result);
+		result = pools[data.type][1][data.command].call(null,data.query);
+		return result;
 	}
 
 	//res.send(a.interface[req.params.command]());

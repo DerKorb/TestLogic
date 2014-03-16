@@ -13,24 +13,25 @@ initClass = function(name, class_descriptor_function) {
 	        {
 		        this[key] = function()
 		        {
-			        $.get.apply(null, ["/interface/"+this.type+"/"+this.key, arguments[0], this.callback]);
-		        }.bind({key: key, callback: _callbacks[key], type: name});
+					console.log({type: this.type, command: this.key, query: arguments[0]});
+			        socket.emit("interface", {type: this.type, command: this.key, query: arguments[0]});
+		        }.bind({key: key, type: name});
 	        }
-	    }
-	    this.help = function() {
-		    $.get.apply(null, ["/interface/"+this.type+"/help", arguments[0], function(help)
-		    {
-			   console.log(help);
-		    }]);
 	    }
     }
     constructors[name] = constructor;
     return constructor;
 }
 
+var socket;
 $(function()
 {
+	socket = io.connect("http://localhost:1337");
+	socket.on("message", function(message) {
+		console.log(message);
+	});
 	objects = {};
+
 	lobby = new Lobby();
 	lobby.list();
 
