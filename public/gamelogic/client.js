@@ -20,15 +20,16 @@ var Client = function()
 
 		});
 		socket.on("object", function(object) {
-			console.log("object", object);
 			if (!that[object.type])
 				that[object.type] = {};
 
-			if (!that[object.type][object.id])
-			if (object.singleton)
-				that[object.type] = new window[object.type];
-			else
-				that[object.type][object.id] = new window[object.type];
+			//if (!that[object.type][object.id])
+			{
+				if (object.singleton)
+					that[object.type] = new window[object.type](object);
+				else
+					that[object.type][object.id] = new window[object.type](object);
+			}
 
 
 		});
@@ -61,19 +62,12 @@ var Client = function()
 
 	this._socket = socket;
 
-	this.login = function(user, pwd) {
-		/*this.Lobby = new Lobby();
-		this.Lobby.login({user: user, pwd: pwd});
-		this.Lobby.list();*/
-	}
-
 	this.initConnection();
 	this.objects = {};
 };
 var client;
 $(function() {
 	client = new Client();
-	client.login("DerKorb", "asdfg");
 });
 
 

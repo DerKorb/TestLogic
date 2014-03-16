@@ -12,6 +12,10 @@ Lobby = function(name)
 
 	}};
 
+	this.join = {callback: function(_game) {
+
+	}};
+
 	this.create = {callback: function(_game) {
 
 	}};
@@ -21,7 +25,6 @@ Lobby = function(name)
 	}
 
 	this.login = {callback: function(result) {
-		console.log(result);
 	}};
 	client.networkObject.call(this, arguments);
 	//setInterval(this.list, 1000);

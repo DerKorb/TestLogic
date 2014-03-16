@@ -4,10 +4,11 @@ exports.Admiral = Admiral;
 exports.Player = Player;
 
 exports.Game = function(name) {
-	this.type = "Lobby";
+	this.type = "Game";
 	var admirals = [];
-	var players = [];
+	this.players = [];
 	this.name = name ? name : "game without a name";
+	var that = this;
 	this.interface = {
 		start: "start a new game",
 		join: "join the game"
@@ -20,11 +21,13 @@ exports.Game = function(name) {
 	}
 
 	this.join = function(player) {
-		players.push(player);
+		that.players.push(player);
+		return {success: true};
 	}
 
 	this.listPlayers = function() {
-		return players.map(function(a) {return a.name});
+		return that.players.map(function(a) {return a.name});
 	}
 	require("./server").networkObject.call(this, arguments);
+	this.broadCast("lobby");
 };

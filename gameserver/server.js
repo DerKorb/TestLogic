@@ -1,4 +1,3 @@
-interface = require("./interface");
 io = require('socket.io').listen(1337, {log: false});
 Game = require("./game");
 Lobby = require("./lobby").Lobby;
@@ -12,7 +11,6 @@ exports.start = function(_app)
 }
 
 exports.sendUpdate = function(object, options) {
-	console.log(object);
 	for (socket in sockets)
 	{
 		sockets[socket].emit("update", data);
@@ -50,7 +48,15 @@ var interface = {};
 
 exports.networkObject = function() {
 	this.broadCast = function(receipients) {
-
+		if (receipients == "lobby")
+		{
+			var socketIds = lobby.sockets();
+			for(s in socketIds)
+			{
+				if (sockets[socketIds[s]])
+					sockets[socketIds[s]].emit("object", this);
+			}
+		}
 	}
 	if (!ids[this.type])
 		ids[this.type] = 1;
@@ -62,7 +68,6 @@ exports.networkObject = function() {
 
 var interface = function(data)
 {
-	console.log(data);
 	if (!pools[data.type])
 		return {error: "unknown interface"};
 

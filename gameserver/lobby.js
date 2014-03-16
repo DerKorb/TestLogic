@@ -6,13 +6,14 @@ var users = {"DerKorb": "asdfg"};
 exports.Lobby = function() {
 	this.type = "Lobby";
 	this.singleton = true;
-	var games = [];
+	var games = {};
 	var players = {};
 	var connectedPlayers = {};
 	this.interface = {
 		list: "show existing games",
 		login: "login using your user data",
-		create: "create a new game"
+		create: "create a new game",
+		join: "join a game"
 	};
 
 	this.login = function(options)
@@ -47,9 +48,8 @@ exports.Lobby = function() {
 		if (!connectedPlayers[options.socketId])
 			return {error: "not logged in"};
 		var game = new Game(options.name);
-		games.push(game);
-		game.join(connectedPlayers[options.socketId]);
-		return game;
+		games[game.id] = game;
+		return {message: "success"};
 	};
 
 	this.list = function(data) {
@@ -60,5 +60,24 @@ exports.Lobby = function() {
 		}
 		return gamelist;
 	};
+
+	this.join = function(options)
+	{
+		if (!connectedPlayers[options.socketId])
+			return {error: "not logged in"};
+		if (!games[options.gameId])
+			return {error: "no such game"};
+		games[options.gameId].join(connectedPlayers[options.socketId]);
+		return {message: "success"};
+	}
+
+	this.sockets = function() {
+		result = [];
+		for(key in connectedPlayers)
+		{
+			result.push(connectedPlayers[key].socketId);
+		};
+		return result;
+	}
 	require("./server").networkObject.call(this, arguments);
 };
