@@ -20,4 +20,5 @@ Lobby = initClass("lobby", function()
 	this.login = {callback: function(result) {
 		console.log(result);
 	}};
+	//setInterval(this.list, 1000);
 });
