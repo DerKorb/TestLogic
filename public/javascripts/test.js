@@ -1,5 +1,5 @@
 var constructors = {};
-var lobby;
+var lobby, game;
 initClass = function(name, class_descriptor_function) {
     var constructor = function() {
         this.type = name;

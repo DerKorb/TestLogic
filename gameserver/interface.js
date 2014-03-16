@@ -21,8 +21,12 @@ exports.interface = function(req, res)
 	if (!pools[req.params.type][1].interface[req.params.command])
 		return res.send({error: "unknown command"});
 
+	req.query.user = "DerKorb";
 	if (!req.params.id)
-		return res.send(pools[req.params.type][1][req.params.command].call(null,req.query));
+	{
+		result = pools[req.params.type][1][req.params.command].call(null,req.query);
+		return res.send(result);
+	}
 
-	res.send(a.interface[req.params.command]());
+	//res.send(a.interface[req.params.command]());
 };

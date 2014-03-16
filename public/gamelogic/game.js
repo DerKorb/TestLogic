@@ -1,12 +1,13 @@
-Game = initClass("game", function()
+Game = initClass("game", function(_data)
 {
-	this.start = {callback: function(games){
-		if (games.error)
-			return;
+	this.name = _data.name;
+	this.id = _data.id;
+	this.players = [];
 
-		$("#game_list").empty();
-		for (g in games)
-			$("<li>").appendTo("#game_list").text(games[g].id+": "+games[g].name);
+	this.start = {callback: function(games){
+
+	}};
+	this.join = {callback: function(status) {
 
 	}};
 });

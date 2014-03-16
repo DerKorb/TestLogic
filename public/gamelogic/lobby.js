@@ -13,11 +13,14 @@ Lobby = initClass("lobby", function()
 
 	}};
 
-	this.create = {callback: function(id) {
-		if (game.error)
-			return console.log(game.error);
+	this.create = {callback: function(_game) {
+		if (_game.error)
+			return console.log(_game.error);
 
-		console.log("created game", id);
+		game = new Game(_game);
+	}};
 
+	this.login = {callback: function(result) {
+		console.log(result);
 	}};
 });
