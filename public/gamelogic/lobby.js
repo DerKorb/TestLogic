@@ -9,6 +9,7 @@ Lobby = function(name)
 			$("<li>").appendTo("#game_list").text(games[g].id+": "+games[g].name);
 			console.log(games[g].id+"\t"+games[g].name);
 		}
+		return games.length;
 
 	}};
 
@@ -25,6 +26,7 @@ Lobby = function(name)
 	}
 
 	this.login = {callback: function(result) {
+		console.log(result);
 	}};
 	client.networkObject.call(this, arguments);
 	//setInterval(this.list, 1000);
