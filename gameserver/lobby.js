@@ -3,7 +3,7 @@ var Player = require("./player").Player;
 
 var users = {"DerKorb": "asdfg"};
 
-exports.Lobby = function() {
+var Lobby = function() {
 	this.type = "Lobby";
 	this.singleton = true;
 	var games = {};
@@ -15,7 +15,7 @@ exports.Lobby = function() {
 		create: "create a new game",
 		join: "join a game"
 	};
-
+}
 	this.login = function(options)
 	{
 		if (connectedPlayers[options.socketId])
@@ -31,6 +31,7 @@ exports.Lobby = function() {
 			players[options.user] = new Player(options.user, options.socketId);
 
 		connectedPlayers[options.socketId] = players[options.user];
+		this.emit("login");
 		return {message: "success"};
 	}
 
@@ -49,6 +50,7 @@ exports.Lobby = function() {
 			return {error: "not logged in"};
 		var game = new Game(options.name);
 		games[game.id] = game;
+		this.emit("created");
 		return {message: "success"};
 	};
 
@@ -81,3 +83,7 @@ exports.Lobby = function() {
 	}
 	require("./server").networkObject.call(this, arguments);
 };
+
+exports.Lobby = Lobby;
+//require("util").inherits(exports.Lobby, require("./server").networkObject);
+require("util").inherits(exports.Lobby, require('events').EventEmitter);

@@ -79,7 +79,7 @@ Client.prototype.initConnection = function()
 var client;
 $(function() {
 	client = new Client({spawn: function(object) {
-			console.log("spawned", object);
+			console.log("spawned", object.type);
 			if (object.type == "Lobby")
 			{
 				this.Lobby.login({user: "DerKorb", pwd: "asdfg"});

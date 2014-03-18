@@ -1,4 +1,4 @@
-io = require('socket.io').listen(1337, {log: true});
+io = require('socket.io').listen(1337, {log: false});
 Game = require("./game");
 Lobby = require("./lobby").Lobby;
 sockets = {};
@@ -8,6 +8,9 @@ exports.start = function(_app)
 {
 	io.sockets.on("connection", connect_client);
 	lobby = new Lobby();
+	/*lobby.on("login", function() {
+		console.log("login");
+	});*/
 }
 
 exports.sendUpdate = function(object, options) {
@@ -25,6 +28,7 @@ connect_client = function(socket) {
 	socket.on("interface", function(data) {
 		data.socketId = socket.socketId;
 		var result = interface(data);
+		console.log(result);
 		if (result.error)
 		{
 			return socket.emit("error", {type: data.type, command: data.command, id: data.id, message: result.error});
@@ -46,25 +50,36 @@ var ids = {};
 var pools = {};
 var interface = {};
 
-exports.networkObject = function() {
-	this.broadCast = function(receipients) {
-		if (receipients == "lobby")
-		{
-			var socketIds = lobby.sockets();
-			for(s in socketIds)
-			{
-				if (sockets[socketIds[s]])
-					sockets[socketIds[s]].emit("object", this);
-			}
-		}
-	}
+var networkObject = function() {
+
 	if (!ids[this.type])
 		ids[this.type] = 1;
 	if (!pools[this.type])
 		pools[this.type] = {};
 	this.id = ids[this.type]++;
 	pools[this.type][this.id] = this;
+	//require('events').EventEmitter.apply(this, arguments);
 }
+EventEmitter = require('events').EventEmitter;
+networkObject.prototype = new EventEmitter();
+networkObject.prototype.constructor = networkObject;
+//require("util").inherits(networkObject, require('events').EventEmitter);
+
+networkObject.prototype.broadCast = function(receipients) {
+	if (receipients == "lobby")
+	{
+		var socketIds = lobby.sockets();
+		for(s in socketIds)
+		{
+			if (sockets[socketIds[s]])
+				sockets[socketIds[s]].emit("object", this);
+		}
+	}
+}
+//require("util").inherits(networkObject, require('events').EventEmitter);
+
+exports.networkObject = networkObject;
+exports.test = 1;
 
 var interface = function(data)
 {

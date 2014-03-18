@@ -31,7 +31,7 @@ app.get('/', routes.index);
 app.get('/users', user.list);
 
 var gameserver = require("./gameserver/server.js");
-gameserver.start(app);
+gameserver.start();
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
