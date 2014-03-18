@@ -1,4 +1,4 @@
-io = require('socket.io').listen(1337, {log: false});
+io = require('socket.io').listen(1337, {log: true});
 Game = require("./game");
 Lobby = require("./lobby").Lobby;
 sockets = {};

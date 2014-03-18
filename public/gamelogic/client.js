@@ -53,6 +53,16 @@ Client.prototype.initConnection = function()
 	console.log(self.spawn);
 	var socket = io.connect("http://localhost:1337");
 
+	socket.on("message", function(message) {
+		if (message.message)
+			console.log(message.type+"::"+message.command+" - "+message.message);
+		else
+			console.log(message);
+	});
+	socket.on("error", function(error) {
+		console.log(error.type+"::"+error.command+" - "+error.message);
+	});
+
 	socket.on("result", function(data) {
 		console.log(data);
 		if (self[data.type]._callbacks[data.command])
