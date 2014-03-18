@@ -1,52 +1,47 @@
 var Client = function(options)
 {
-	var socket;
-	var self = this;
 	this.options = options;
 	this.spawn = options.spawn;
+	this.objects = {};
+	this.initConnection();
+};
+Client.prototype.constructor = Client;
 
-	this.networkObject = function() {
-		this._callbacks = {};
-		this._listeners = {}
-		this.on = function(tag, callback) {
-			if (!this._listeners[tag])
-				this._listeners[tag] = [];
-			this._listeners[tag] = [callback].concat(this._listeners[tag]);
-		}
-		this.emit = function() {
-			var tag = arguments[0];
-			arguments.shift();
-			for(l in this._listeners._listners[tag])
-				this._listners[tag][l].call(this, arguments);
-		}
-		var _data = {};
-		for(key in this)
+Client.prototype.networkObject = function() {
+	var self = this;
+	this._callbacks = {};
+	this._listeners = {}
+	this.on = function(tag, callback) {
+		if (!self._listeners[tag])
+			self._listeners[tag] = [];
+		this._listeners[tag] = [callback].concat(self._listeners[tag]);
+	}
+	this.emit = function() {
+		var tag = arguments[0];
+		arguments.shift();
+		for(l in self._listeners._listners[tag])
+			self._listners[tag][l].call(this, arguments);
+	}
+	var _data = {};
+	for(key in self.interface)
+	{
+		if (typeof(self.interface[key]) == "function")
+			self._callbacks[key] = self[key].interface[key];
+		_data[key] = self[key.data];
+		if (self._callbacks[key])
 		{
-			if (!this[key] || !this[key].callback)
-				continue;
-			this._callbacks[key] = this[key].callback;
-			_data[key] = this[key.data];
-			if (this._callbacks[key])
+			self[key] = function()
 			{
-				this[key] = function()
-				{
-					var data = {
-						type: this.type,
-						command: this.key,
-						query: arguments[0]
-					}
-					client._socket.emit("interface", data);
-				}.bind({key: key, callback: this._callbacks[key], type: this.type});
-			}
+				var data = {
+					type: this.type,
+					command: this.key,
+					query: arguments[0]
+				}
+				client._socket.emit("interface", data);
+			}.bind({key: key, callback: self._callbacks[key], type: self.type});
 		}
 	}
-
-	this._socket = socket;
-
-	this.initConnection();
-	this.objects = {};
-};
-
+}
 Client.prototype.initConnection = function()
 {
 	var self = this;
