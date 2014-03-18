@@ -9,7 +9,6 @@ Client.prototype.constructor = Client;
 
 Client.prototype.networkObject = function() {
 	var self = this;
-	this._callbacks = {};
 	this._listeners = {}
 	this.on = function(tag, callback) {
 		if (!self._listeners[tag])
@@ -25,21 +24,15 @@ Client.prototype.networkObject = function() {
 	var _data = {};
 	for(key in self.interface)
 	{
-		if (typeof(self.interface[key]) == "function")
-			self._callbacks[key] = self[key].interface[key];
-		_data[key] = self[key.data];
-		if (self._callbacks[key])
+		self[key] = function()
 		{
-			self[key] = function()
-			{
-				var data = {
-					type: this.type,
-					command: this.key,
-					query: arguments[0]
-				}
-				client._socket.emit("interface", data);
-			}.bind({key: key, callback: self._callbacks[key], type: self.type});
-		}
+			var data = {
+				type: this.type,
+				command: this.key,
+				query: arguments[0]
+			}
+			client._socket.emit("interface", data);
+		}.bind({key: key, type: self.type});
 	}
 }
 Client.prototype.initConnection = function()
@@ -59,9 +52,9 @@ Client.prototype.initConnection = function()
 	});
 
 	socket.on("result", function(data) {
-		console.log(data);
-		if (self[data.type]._callbacks[data.command])
-			self[data.type]._callbacks[data.command](data.result);
+		console.log("data", data);
+		if (typeof(self[data.type].interface[data.command]) == "function")
+			self[data.type].interface[data.command].call(null, data.result);
 
 	});
 	socket.on("object", function(object) {
