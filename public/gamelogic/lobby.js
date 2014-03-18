@@ -7,7 +7,8 @@ Lobby = function(name)
 
 Lobby.prototype.interface = {
 	join: true,
-	list: true
+	list: true,
+	login: true
 }
 
 Lobby.prototype.list = {callback: function(games){
