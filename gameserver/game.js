@@ -29,5 +29,4 @@ exports.Game = function(name) {
 		return that.players.map(function(a) {return a.name});
 	}
 	require("./server").networkObject.call(this, arguments);
-	this.broadCast("lobby");
 };

@@ -58,7 +58,7 @@ Client.prototype.initConnection = function()
 
 	});
 	socket.on("object", function(object) {
-		console.log("object", self.spwan);
+		console.log("object", object);
 		if (!self[object.type])
 			self[object.type] = {};
 

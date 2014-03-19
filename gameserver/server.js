@@ -8,12 +8,6 @@ exports.start = function(_app)
 {
 	io.sockets.on("connection", connect_client);
 	lobby = new Lobby();
-	lobby.on("login", function(name) {
-		console.log("login", name);
-	});
-	lobby.on("logout", function(name) {
-		console.log("logout", name);
-	});
 }
 
 exports.sendUpdate = function(object, options) {
@@ -53,19 +47,17 @@ var pools = {};
 var interface = {};
 
 var networkObject = function() {
-
+	var self = this;
 	if (!ids[this.type])
 		ids[this.type] = 1;
 	if (!pools[this.type])
 		pools[this.type] = {};
 	this.id = ids[this.type]++;
 	pools[this.type][this.id] = this;
-	//require('events').EventEmitter.apply(this, arguments);
 	EE = require('events').EventEmitter;
-	//console.log(EE.prototype);
 	this.on = EE.prototype.on.bind(this);
 	this.emit = EE.prototype.emit.bind(this);
-	this.spawn = function(object) {
+	this.spawn = function(object, receipients) {
 		if (object.singleton)
 			this[object.type] = object;
 		else
@@ -74,27 +66,24 @@ var networkObject = function() {
 				this[object.type] = {};
 			this[object.type][object.id] = object;
 		}
+		this.broadCast("lobby", object);
 	}
-	this.broadCast = function(receipients) {
+
+	this.broadCast = function(receipients, object) {
+		console.log("broadcast");
 		if (receipients == "lobby")
 		{
 			var socketIds = lobby.sockets();
 			for(s in socketIds)
 			{
 				if (sockets[socketIds[s]])
-					sockets[socketIds[s]].emit("object", this);
+					sockets[socketIds[s]].emit("object", {object: object ? object : this, id: this.id, type: this.type});
 			}
 		}
 	}
 
 }
-networkObject.prototype.constructor = networkObject;
-//require("util").inherits(networkObject, require('events').EventEmitter);
-
-//require("util").inherits(networkObject, require('events').EventEmitter);
-
 exports.networkObject = networkObject;
-exports.test = 1;
 
 var interface = function(data)
 {

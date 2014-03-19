@@ -30,6 +30,8 @@ Lobby.prototype.login = function(options)
 
 		if (!this.players[options.user])
 			this.players[options.user] = new Player(options.user, options.socketId);
+		else
+			this.players[options.user].socketId = options.socketId;
 
 		this.connectedPlayers[options.socketId] = this.players[options.user];
 		this.emit("login", options.user);
@@ -50,9 +52,7 @@ Lobby.prototype.logout = function(socketId)
 Lobby.prototype.create = function(options) {
 		if (!this.connectedPlayers[options.socketId])
 			return {error: "not logged in"};
-		var game = new Game(options.name);
-		this.spawn(game);
-		this.games[game.id] = game;
+		this.spawn(new Game(options.name));
 		this.emit("created");
 		return {message: "success"};
 	};
@@ -61,7 +61,7 @@ Lobby.prototype.list = function(data) {
 		var gamelist = [];
 		for(id in this.Game)
 		{
-			gamelist.push({name: this.Game[id].name, id: id, players: this.games[id].listPlayers()});
+			gamelist.push({name: this.Game[id].name, id: id, players: this.Game[id].listPlayers()});
 		}
 		return gamelist;
 	};
