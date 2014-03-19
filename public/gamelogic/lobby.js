@@ -1,9 +1,16 @@
-Lobby = function(name)
+Lobby = function(object)
 {
-	this.games = [];
+    Events.call(this);
 	this.type = "Lobby";
-	client.networkObject.call(this, arguments);
+    this.on("spawn", function(object) {
+        if (object.type == "Game")
+        {
+            $("<li>").appendTo("#game_list").text(object.id+": "+object.name);
+        }
+    });
+    client.networkObject.call(this, arguments);
 }
+
 
 Lobby.prototype.interface = {
 	join: true,

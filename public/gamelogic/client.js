@@ -9,26 +9,60 @@ var Client = function(options)
 };
 Client.prototype.constructor = Client;
 
-Client.prototype.networkObject = function() {
+Events = function()
+{
+    var self = this;
+    this._listeners = {};
+    this.on = function(tag, callback) {
+        if (!self._listeners[tag])
+            self._listeners[tag] = [];
+        this._listeners[tag] = [callback].concat(self._listeners[tag]);
+    }
+
+    this.emit = function()
+    {
+        var tag = arguments[0];
+        arguments = $.makeArray(arguments);
+        arguments.shift();
+        for(l in self._listeners[tag])
+            self._listeners[tag][l].apply(this, arguments);
+    }
+}
+
+Client.prototype.networkObject = function(parent) {
 	var self = this;
-	this._listeners = {}
-	this.on = function(tag, callback) {
-		if (!self._listeners[tag])
-			self._listeners[tag] = [];
-		this._listeners[tag] = [callback].concat(self._listeners[tag]);
-	}
-	this.emit = function() {
-		var tag = arguments[0];
-		arguments.shift();
-		for(l in self._listeners._listners[tag])
-			self._listners[tag][l].call(this, arguments);
-	}
 	this._spawn = function(spawnling) {
 		if (!self[spawnling.type])
 			self[spawnling.type] = [];
 		self[spawnling.type].push(spawnling);
+        self.emit("spawn", spawnling);
 		return spawnling;
 	}
+
+    if (parent[0] && parent[0].type)
+    {
+        console.log("creating ", parent[0].type);
+        for (key in parent[0])
+        {
+            if (parent[0][key].type)
+            {
+                this._spawn(new window[parent[0][key].type](parent[0][key]));
+            }
+            else if (typeof(parent[0][key]) == "object")
+            {
+                for(id in parent[0][key])
+                {
+                    if (parent[0][key][id] && parent[0][key][id].type != "undefined" && window[parent[0][key][id].type])
+                    {
+                        this._spawn(new window[parent[0][key][id].type](parent[0][key][id]));
+                    }
+                }
+            }
+            else
+                this[key] = parent[0][key];
+        }
+
+    }
 	var _data = {};
 	for(key in self.interface)
 	{
