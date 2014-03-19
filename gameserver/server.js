@@ -8,6 +8,7 @@ exports.start = function(_app)
 {
 	io.sockets.on("connection", connect_client);
 	lobby = new Lobby();
+	console.log(Lobby.prototype.singleton);
 }
 
 exports.sendUpdate = function(object, options) {
@@ -66,7 +67,7 @@ var networkObject = function() {
 				this[object.type] = {};
 			this[object.type][object.id] = object;
 		}
-		this.broadCast("lobby", object);
+		this.spawnCast("lobby", object);
 	}
 
 	this.broadCast = function(receipients, object) {
@@ -76,8 +77,22 @@ var networkObject = function() {
 			var socketIds = lobby.sockets();
 			for(s in socketIds)
 			{
+				console.log(object);
 				if (sockets[socketIds[s]])
 					sockets[socketIds[s]].emit("object", {object: object ? object : this, id: this.id, type: this.type});
+			}
+		}
+	}
+	this.spawnCast = function(receipients, object) {
+		console.log("broadcast");
+		if (receipients == "lobby")
+		{
+			var socketIds = lobby.sockets();
+			for(s in socketIds)
+			{
+				console.log(object);
+				if (sockets[socketIds[s]])
+					sockets[socketIds[s]].emit("spawn", {object: object ? object : this, id: this.id, type: this.type});
 			}
 		}
 	}

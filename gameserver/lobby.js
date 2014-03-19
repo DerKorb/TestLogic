@@ -17,6 +17,8 @@ Lobby = function() {
 	};
 	require("./server").networkObject.call(this, arguments);
 }
+
+Lobby.prototype.singleton = true;
 Lobby.prototype.login = function(options)
 	{
 		if (this.connectedPlayers[options.socketId])

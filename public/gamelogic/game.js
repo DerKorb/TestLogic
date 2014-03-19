@@ -1,5 +1,6 @@
 Game = function(_data)
 {
+	console.log(_data);
 	this.type = "Game";
 	this.name = _data.name;
 	this.id = _data.id;
