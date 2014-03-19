@@ -15,8 +15,9 @@ var Lobby = function() {
 		create: "create a new game",
 		join: "join a game"
 	};
+	require("./server").networkObject.call(this, arguments);
 }
-	this.login = function(options)
+Lobby.prototype.login = function(options)
 	{
 		if (connectedPlayers[options.socketId])
 			return {error: "already logged in as "+connectedPlayers[options.socketId].name};
@@ -35,7 +36,7 @@ var Lobby = function() {
 		return {message: "success"};
 	}
 
-	this.logout = function(socketId)
+Lobby.prototype.logout = function(socketId)
 	{
 		if (!connectedPlayers[socketId])
 			return {error: "not logged in"};
@@ -45,7 +46,7 @@ var Lobby = function() {
 		return {message: "success"};
 	}
 
-	this.create = function(options) {
+Lobby.prototype.create = function(options) {
 		if (!connectedPlayers[options.socketId])
 			return {error: "not logged in"};
 		var game = new Game(options.name);
@@ -54,7 +55,7 @@ var Lobby = function() {
 		return {message: "success"};
 	};
 
-	this.list = function(data) {
+Lobby.prototype.list = function(data) {
 		var gamelist = [];
 		for(g in games)
 		{
@@ -63,7 +64,7 @@ var Lobby = function() {
 		return gamelist;
 	};
 
-	this.join = function(options)
+Lobby.prototype.join = function(options)
 	{
 		if (!connectedPlayers[options.socketId])
 			return {error: "not logged in"};
@@ -73,7 +74,7 @@ var Lobby = function() {
 		return {message: "success"};
 	}
 
-	this.sockets = function() {
+Lobby.prototype.sockets = function() {
 		result = [];
 		for(key in connectedPlayers)
 		{
@@ -81,8 +82,7 @@ var Lobby = function() {
 		};
 		return result;
 	}
-	require("./server").networkObject.call(this, arguments);
-};
+
 
 exports.Lobby = Lobby;
 //require("util").inherits(exports.Lobby, require("./server").networkObject);

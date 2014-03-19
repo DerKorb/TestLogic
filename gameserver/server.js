@@ -99,5 +99,6 @@ var interface = function(data)
 	if (!pools[data.type][data.id].interface[data.command])
 		return {error: "unknown command"};
 
-	return pools[data.type][data.id][data.command].call(null,data.query);
+	console.log(data, pools[data.type][data.id].login);
+	return pools[data.type][data.id][data.command].call(null, data.query);
 };
