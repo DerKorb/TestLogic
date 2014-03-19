@@ -8,9 +8,12 @@ exports.start = function(_app)
 {
 	io.sockets.on("connection", connect_client);
 	lobby = new Lobby();
-	/*lobby.on("login", function() {
-		console.log("login");
-	});*/
+	lobby.on("login", function(name) {
+		console.log("login", name);
+	});
+	lobby.on("logout", function(name) {
+		console.log("logout", name);
+	});
 }
 
 exports.sendUpdate = function(object, options) {
@@ -28,7 +31,6 @@ connect_client = function(socket) {
 	socket.on("interface", function(data) {
 		data.socketId = socket.socketId;
 		var result = interface(data);
-		console.log(result);
 		if (result.error)
 		{
 			return socket.emit("error", {type: data.type, command: data.command, id: data.id, message: result.error});
@@ -59,23 +61,36 @@ var networkObject = function() {
 	this.id = ids[this.type]++;
 	pools[this.type][this.id] = this;
 	//require('events').EventEmitter.apply(this, arguments);
+	EE = require('events').EventEmitter;
+	//console.log(EE.prototype);
+	this.on = EE.prototype.on.bind(this);
+	this.emit = EE.prototype.emit.bind(this);
+	this.spawn = function(object) {
+		if (object.singleton)
+			this[object.type] = object;
+		else
+		{
+			if (!this[object.type])
+				this[object.type] = {};
+			this[object.type][object.id] = object;
+		}
+	}
+	this.broadCast = function(receipients) {
+		if (receipients == "lobby")
+		{
+			var socketIds = lobby.sockets();
+			for(s in socketIds)
+			{
+				if (sockets[socketIds[s]])
+					sockets[socketIds[s]].emit("object", this);
+			}
+		}
+	}
+
 }
-EventEmitter = require('events').EventEmitter;
-networkObject.prototype = new EventEmitter();
 networkObject.prototype.constructor = networkObject;
 //require("util").inherits(networkObject, require('events').EventEmitter);
 
-networkObject.prototype.broadCast = function(receipients) {
-	if (receipients == "lobby")
-	{
-		var socketIds = lobby.sockets();
-		for(s in socketIds)
-		{
-			if (sockets[socketIds[s]])
-				sockets[socketIds[s]].emit("object", this);
-		}
-	}
-}
 //require("util").inherits(networkObject, require('events').EventEmitter);
 
 exports.networkObject = networkObject;
@@ -99,6 +114,5 @@ var interface = function(data)
 	if (!pools[data.type][data.id].interface[data.command])
 		return {error: "unknown command"};
 
-	console.log(data, pools[data.type][data.id].login);
-	return pools[data.type][data.id][data.command].call(null, data.query);
+	return pools[data.type][data.id][data.command].call(pools[data.type][data.id], data.query);
 };

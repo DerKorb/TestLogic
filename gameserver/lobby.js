@@ -3,12 +3,12 @@ var Player = require("./player").Player;
 
 var users = {"DerKorb": "asdfg"};
 
-var Lobby = function() {
+Lobby = function() {
 	this.type = "Lobby";
 	this.singleton = true;
-	var games = {};
-	var players = {};
-	var connectedPlayers = {};
+	this.games = {};
+	this.players = {};
+	this.connectedPlayers = {};
 	this.interface = {
 		list: "show existing games",
 		login: "login using your user data",
@@ -19,8 +19,8 @@ var Lobby = function() {
 }
 Lobby.prototype.login = function(options)
 	{
-		if (connectedPlayers[options.socketId])
-			return {error: "already logged in as "+connectedPlayers[options.socketId].name};
+		if (this.connectedPlayers[options.socketId])
+			return {error: "already logged in as "+this.connectedPlayers[options.socketId].name};
 
 		if (!users[options.user])
 			return {error: "user unknown"};
@@ -28,38 +28,40 @@ Lobby.prototype.login = function(options)
 		if (users[options.user]!=options.pwd)
 			return {error: "wrong password"};
 
-		if (!players[options.user])
-			players[options.user] = new Player(options.user, options.socketId);
+		if (!this.players[options.user])
+			this.players[options.user] = new Player(options.user, options.socketId);
 
-		connectedPlayers[options.socketId] = players[options.user];
-		this.emit("login");
+		this.connectedPlayers[options.socketId] = this.players[options.user];
+		this.emit("login", options.user);
 		return {message: "success"};
 	}
 
 Lobby.prototype.logout = function(socketId)
 	{
-		if (!connectedPlayers[socketId])
+		if (!this.connectedPlayers[socketId])
 			return {error: "not logged in"};
 
-		connectedPlayers[socketId].socketId = false;
-		delete connectedPlayers[socketId];
+		this.emit("logout", this.connectedPlayers[socketId].name);
+		this.connectedPlayers[socketId].socketId = false;
+		delete this.connectedPlayers[socketId];
 		return {message: "success"};
 	}
 
 Lobby.prototype.create = function(options) {
-		if (!connectedPlayers[options.socketId])
+		if (!this.connectedPlayers[options.socketId])
 			return {error: "not logged in"};
 		var game = new Game(options.name);
-		games[game.id] = game;
+		this.spawn(game);
+		this.games[game.id] = game;
 		this.emit("created");
 		return {message: "success"};
 	};
 
 Lobby.prototype.list = function(data) {
 		var gamelist = [];
-		for(g in games)
+		for(id in this.Game)
 		{
-			gamelist.push({name: games[g].name, id: games[g].id, players: games[g].listPlayers()});
+			gamelist.push({name: this.Game[id].name, id: id, players: this.games[id].listPlayers()});
 		}
 		return gamelist;
 	};
@@ -74,16 +76,14 @@ Lobby.prototype.join = function(options)
 		return {message: "success"};
 	}
 
-Lobby.prototype.sockets = function() {
-		result = [];
-		for(key in connectedPlayers)
-		{
-			result.push(connectedPlayers[key].socketId);
-		};
-		return result;
-	}
-
-
+Lobby.prototype.sockets = function()
+{
+	result = [];
+	for(key in this.connectedPlayers)
+	{
+		result.push(this.connectedPlayers[key].socketId);
+	};
+	return result;
+}
 exports.Lobby = Lobby;
-//require("util").inherits(exports.Lobby, require("./server").networkObject);
-require("util").inherits(exports.Lobby, require('events').EventEmitter);
+
