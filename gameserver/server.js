@@ -86,7 +86,6 @@ var networkObject = function() {
 	}
 
 	this.spawnCast = function(object) {
-		console.log(arguments);
 		if (!object)
 			object = this;
 		var receipients = object.receipients ? object.receipients : this.receipients;

@@ -66,9 +66,12 @@ Client.prototype.networkObject = function(parent) {
     }
 	if (this.template)
 	{
-		$.get("/template/"+this.type, function(template) {
-			console.log(self);
-			templates[this.type] = template;
+		if (templates[self.type])
+			return self.emit("template", templates[self.type]);
+		$.get("/template/"+this.type, function(template)
+		{
+			templates[self.type] = template;
+			self.emit("template", template);
 		});
 	}
 
@@ -147,7 +150,6 @@ Client.prototype.initConnection = function()
 var client;
 $(function() {
 	client = new Client({spawn: function(object) {
-			console.log("spawned", object.type);
 			if (object.type == "Lobby")
 			{
 				this.Lobby.login({user: "DerKorb", pwd: "asdfg"});
