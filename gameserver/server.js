@@ -12,6 +12,7 @@ exports.start = function(_app)
 	console.log(Lobby.prototype.singleton);
 	lobby.on("login", function(playerName, socketId)
 	{
+		sockets[socketId].playerName = playerName;
 		sockets_by_name[playerName] = sockets[socketId];
 	});
 }
@@ -123,6 +124,7 @@ var interface = function(data)
 	if (!data.query)
 		data.query = {};
 	data.query.socketId = data.socketId;
+	data.query.playerName = sockets[data.socketId].playerName;
 
 	if (!pools[data.type][data.id])
 		return {error: "object does not exist"};

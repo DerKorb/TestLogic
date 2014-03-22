@@ -68,8 +68,10 @@ Client.prototype.networkObject = function(parent) {
 
     if (parent && parent.type)
     {
+	    console.log("parent", parent);
         for (var key in parent)
         {
+	        console.log(key, parent[key]);
             if (parent[key].type)
             {
                 this._spawn(new window[parent[key].type](parent[key]));
@@ -82,10 +84,15 @@ Client.prototype.networkObject = function(parent) {
                     {
 	                    this._spawn(new window[parent[key][id].type](parent[key][id]));
                     }
+	                else
+	                    this[key] = parent[key];
                 }
             }
             else
+            {
+	            console.log(key);
                 this[key] = parent[key];
+            }
         }
 
     }

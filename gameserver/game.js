@@ -22,7 +22,7 @@ exports.Game = function(name) {
 
 	this.join = function(player) {
 		that.players.push(player);
-		return {success: true};
+		return {message: "success"};
 	}
 
 	this.listPlayers = function() {

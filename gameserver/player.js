@@ -3,7 +3,5 @@ exports.Player = function(name, socketId) {
 	var games = [];
 	this.name = name;
 	this.socketId = socketId;
-	this.interface = {
-	};
 	require("./server").networkObject.call(this, arguments);
 };
