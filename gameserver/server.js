@@ -101,7 +101,7 @@ var networkObject = function() {
 		this.receipients.push(listener);
 	}
 
-	this.removeListener = function(listner)
+	this.removeListener = function(listener)
 	{
 		if (this.receipients.indexOf(listener)!==-1)
 			this.receipients.splice(this.receipients.indexOf(listener),1);

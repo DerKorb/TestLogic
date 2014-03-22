@@ -36,7 +36,7 @@ Lobby.prototype.login = function(options)
 			this.players[options.user].socketId = options.socketId;
 
 		this.connectedPlayers[options.socketId] = this.players[options.user];
-		this.receipients.push(options.user);
+		this.addListener(options.user);
 		this.emit("login", options.user, options.socketId);
 		return {message: "success"};
 	}
@@ -47,6 +47,7 @@ Lobby.prototype.logout = function(socketId)
 			return {error: "not logged in"};
 
 		this.emit("logout", this.connectedPlayers[socketId].name);
+		this.removeListener(this.connectedPlayers[socketId].name);
 		this.connectedPlayers[socketId].socketId = false;
 		delete this.connectedPlayers[socketId];
 		return {message: "success"};
