@@ -59,6 +59,7 @@ var networkObject = function() {
 	if (!pools[this.type])
 		pools[this.type] = {};
 	this.id = ids[this.type]++;
+	this.receipients = [];
 	pools[this.type][this.id] = this;
 	EE = require('events').EventEmitter;
 	this.on = EE.prototype.on.bind(this);
