@@ -6,6 +6,7 @@ var users = {"DerKorb": "asdfg"};
 Lobby = function() {
 	this.type = "Lobby";
 	this.singleton = true;
+	this.receipients = ["DerKorb"];
 	this.games = {};
 	this.players = {};
 	this.connectedPlayers = {};
@@ -36,7 +37,7 @@ Lobby.prototype.login = function(options)
 			this.players[options.user].socketId = options.socketId;
 
 		this.connectedPlayers[options.socketId] = this.players[options.user];
-		this.emit("login", options.user);
+		this.emit("login", options.user, options.socketId);
 		return {message: "success"};
 	}
 

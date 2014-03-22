@@ -2,6 +2,7 @@ io = require('socket.io').listen(1337, {log: false});
 Game = require("./game");
 Lobby = require("./lobby").Lobby;
 sockets = {};
+var sockets_by_name = {};
 
 var lobby;
 exports.start = function(_app)
@@ -9,6 +10,10 @@ exports.start = function(_app)
 	io.sockets.on("connection", connect_client);
 	lobby = new Lobby();
 	console.log(Lobby.prototype.singleton);
+	lobby.on("login", function(playerName, socketId)
+	{
+		sockets_by_name[playerName] = sockets[socketId];
+	});
 }
 
 exports.sendUpdate = function(object, options) {
@@ -19,7 +24,7 @@ exports.sendUpdate = function(object, options) {
 }
 
 uniqueId = 1;
-connect_client = function(socket) { // @todo: associate socket and playername
+connect_client = function(socket) {
 	socket.socketId = uniqueId++;
 	sockets[socket.socketId] = socket;
 	socket.emit("message", "connected");
@@ -79,7 +84,7 @@ var networkObject = function() {
 			sockets_by_name[name].emit("object", {object: object, id: this.id, type: this.type});
 		}
 	}
-	
+
 	this.spawnCast = function(receipients, object) {
 		if (!object)
 			object = this;

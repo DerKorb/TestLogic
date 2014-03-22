@@ -2,7 +2,6 @@ Lobby = function(object)
 {
     Events.call(this);
 	this.type = "Lobby";
-	this.receipients = ["DerKorb"];
 	this.template = true;
     this.on("spawn", function(object) {
         if (object.type == "Game")
