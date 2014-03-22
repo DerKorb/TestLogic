@@ -59,21 +59,20 @@ var networkObject = function() {
 	if (!pools[this.type])
 		pools[this.type] = {};
 	this.id = ids[this.type]++;
-	this.receipients = [];
 	pools[this.type][this.id] = this;
 	EE = require('events').EventEmitter;
 	this.on = EE.prototype.on.bind(this);
 	this.emit = EE.prototype.emit.bind(this);
 	this.spawn = function(object, receipients) {
 		if (object.singleton)
-			this[object.type] = object;
+			this[object.type];
 		else
 		{
 			if (!this[object.type])
 				this[object.type] = {};
 			this[object.type][object.id] = object;
 		}
-		this.spawnCast("lobby", object);
+		this.spawnCast(object);
 	}
 
 	this.broadCast = function(receipients, object) {
@@ -86,10 +85,12 @@ var networkObject = function() {
 		}
 	}
 
-	this.spawnCast = function(receipients, object) {
+	this.spawnCast = function(object) {
+		console.log(arguments);
 		if (!object)
 			object = this;
-		for (r in object.receipients)
+		var receipients = object.receipients ? object.receipients : this.receipients;
+		for (r in receipients)
 		{
 			var name = receipients[r];
 			sockets_by_name[name].emit("spawn", {object: object, id: this.id, type: this.type});
@@ -98,6 +99,8 @@ var networkObject = function() {
 	}
 	this.addListener = function(listener)
 	{
+		if (!this.receipients)
+			this.receipients = [];
 		this.receipients.push(listener);
 	}
 
