@@ -96,6 +96,16 @@ var networkObject = function() {
 		}
 
 	}
+	this.addListener = function(listener)
+	{
+		this.receipients.push(listener);
+	}
+
+	this.removeListener = function(listner)
+	{
+		if (this.receipients.indexOf(listener)!==-1)
+			this.receipients.splice(this.receipients.indexOf(listener),1);
+	}
 
 }
 exports.networkObject = networkObject;
