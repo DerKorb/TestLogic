@@ -41,14 +41,22 @@ Client.prototype.networkObject = function(parent) {
 			this.template = this.template.split("->")[1];
 		}
 		this.html = $.zc(this.template, {});
-
-		if (target)
-			$(this.html).appendTo(target).find("button").click(function(event)
+		this.html.addTo = function(target2)
+		{
+			$(self.html).appendTo(target2).find("button").click(function(event)
 			{
+				console.log("click", self, event);
 				self[event.target.id].call(self);
 			});
+		}
+
+
+		if (target)
+			this.html.addTo(target);
 		else
+		{
 			this.emit("html", this.html);
+		}
 	}
 	this._spawn = function(spawnling) {
 		if (!self[spawnling.type])

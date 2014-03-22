@@ -5,16 +5,6 @@ Game = function(_data)
 	this.name = _data.name;
 	this.id = _data.id;
 	this.players = _data.players ? _data.players : [];
-
-	this.template = "li{"+this.id+": "+this.name+"}";
-
-	this.start = {callback: function(games)
-    {
-
-	}};
-	this.join = {callback: function(status)
-    {
-
-	}};
+	this.template = "li>{"+this.id+": "+this.name+"}+button#delete{delete this game}+button#join{join this game}";
 	client.networkObject.call(this, false);
 };

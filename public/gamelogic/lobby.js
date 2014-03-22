@@ -8,7 +8,7 @@ Lobby = function(object)
     this.on("spawn", function(object) {
 	    if (object.type == "Game")
         {
-	        object.html.appendTo(this.html.find("#game_list"));
+	        object.html.addTo(this.html.find("#game_list"));
         }
     });
 

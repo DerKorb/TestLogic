@@ -10,7 +10,6 @@ Lobby = function() {
 	this.players = {};
 	this.connectedPlayers = {};
 	this.interface = {
-		list: "show existing games",
 		login: "login using your user data",
 		create: "create a new game",
 		join: "join a game"
