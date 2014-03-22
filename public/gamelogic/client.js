@@ -32,6 +32,7 @@ Events = function()
 
 Client.prototype.networkObject = function(parent) {
 	var self = this;
+	console.log(parent);
 	if (this.template)
 	{
 		var target = false;
@@ -79,7 +80,7 @@ Client.prototype.networkObject = function(parent) {
             {
                 for(id in parent[0][key])
                 {
-                    if (parent[0][key][id] && parent[0][key][id].type != "undefined" && window[parent[0][key][id].type])
+                    if (parent[0][key] && parent[0][key][id] && parent[0][key][id].type != "undefined" && window[parent[0][key][id].type])
                     {
                         this._spawn(new window[parent[0][key][id].type](parent[0][key][id]));
                     }
