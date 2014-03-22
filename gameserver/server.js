@@ -19,7 +19,7 @@ exports.sendUpdate = function(object, options) {
 }
 
 uniqueId = 1;
-connect_client = function(socket) {
+connect_client = function(socket) { // @todo: associate socket and playername
 	socket.socketId = uniqueId++;
 	sockets[socket.socketId] = socket;
 	socket.emit("message", "connected");
@@ -71,30 +71,24 @@ var networkObject = function() {
 	}
 
 	this.broadCast = function(receipients, object) {
-		console.log("broadcast");
-		if (receipients == "lobby")
+		if (!object)
+			object = this;
+		for (r in object.receipients)
 		{
-			var socketIds = lobby.sockets();
-			for(s in socketIds)
-			{
-				console.log(object);
-				if (sockets[socketIds[s]])
-					sockets[socketIds[s]].emit("object", {object: object ? object : this, id: this.id, type: this.type});
-			}
+			var name = receipients[r];
+			sockets_by_name[name].emit("object", {object: object, id: this.id, type: this.type});
 		}
 	}
+	
 	this.spawnCast = function(receipients, object) {
-		console.log("broadcast");
-		if (receipients == "lobby")
+		if (!object)
+			object = this;
+		for (r in object.receipients)
 		{
-			var socketIds = lobby.sockets();
-			for(s in socketIds)
-			{
-				console.log(object);
-				if (sockets[socketIds[s]])
-					sockets[socketIds[s]].emit("spawn", {object: object ? object : this, id: this.id, type: this.type});
-			}
+			var name = receipients[r];
+			sockets_by_name[name].emit("spawn", {object: object, id: this.id, type: this.type});
 		}
+
 	}
 
 }

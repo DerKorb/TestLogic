@@ -1,4 +1,5 @@
 var pools = {};
+var templates = {};
 
 var Client = function(options)
 {
@@ -63,6 +64,14 @@ Client.prototype.networkObject = function(parent) {
         }
 
     }
+	if (this.template)
+	{
+		$.get("/template/"+this.type, function(template) {
+			console.log(self);
+			templates[this.type] = template;
+		});
+	}
+
 	var _data = {};
 	for(key in self.interface)
 	{

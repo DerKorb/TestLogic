@@ -28,6 +28,7 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', routes.index);
+app.get('/template/:name', routes.template);
 app.get('/users', user.list);
 
 var gameserver = require("./gameserver/server.js");
