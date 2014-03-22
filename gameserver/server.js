@@ -65,6 +65,8 @@ var networkObject = function() {
 	this.on = EE.prototype.on.bind(this);
 	this.emit = EE.prototype.emit.bind(this);
 	this.spawn = function(object, receipients) {
+		if (!object.receipients)
+			object.receipients = self.receipients;
 		if (object.singleton)
 			this[object.type];
 		else
@@ -89,7 +91,7 @@ var networkObject = function() {
 	this.spawnCast = function(object) {
 		if (!object)
 			object = this;
-		var receipients = object.receipients ? object.receipients : this.receipients;
+		var receipients = object.receipients ? object.receipients : self.receipients;
 		for (r in receipients)
 		{
 			var name = receipients[r];

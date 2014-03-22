@@ -59,6 +59,22 @@ Client.prototype.networkObject = function(parent) {
 		}
 	}
 	this._spawn = function(spawnling) {
+		console.log("bla", self, spawnling, pools);
+		if (!pools[spawnling.type])
+			pools[spawnling.type] = {};
+
+		if (self.singleton)
+		{
+			console.log("single", pools[self.type]);
+			pools[spawnling.type][spawnling.id] = pools[self.type]          ._spawn(new window[spawnling.type](spawnling));
+		}
+		else
+		{
+			console.log(spawnling);
+			pools[spawnling.type][spawnling.id]  = pools[self.type][self.id]._spawn(new window[spawnling.type](spawnling));
+		}
+
+		console.log("spawning", spawnling);
 		if (!self[spawnling.type])
 			self[spawnling.type] = [];
 		self[spawnling.type].push(spawnling);
@@ -71,7 +87,6 @@ Client.prototype.networkObject = function(parent) {
 	    console.log("parent", parent);
         for (var key in parent)
         {
-	        console.log(key, parent[key]);
             if (parent[key].type)
             {
                 this._spawn(new window[parent[key].type](parent[key]));
@@ -90,7 +105,6 @@ Client.prototype.networkObject = function(parent) {
             }
             else
             {
-	            console.log(key);
                 this[key] = parent[key];
             }
         }
@@ -154,17 +168,21 @@ Client.prototype.initConnection = function()
 			self.spawn.call(self, object);
 	});
 	socket.on("spawn", function(spawn) {
-		if (spawn.singleton)
-			console.log(spawn.type, ": spawned", spawn.object.type, "["+spawn.object.id+"]");
-		else
-			console.log(spawn.type, "["+ spawn.id +"]: spawned", spawn.object.type, "["+spawn.object.id+"]");
+		console.log("spawn");
+		// create a pool of the objects type if not already exists:
 		if (!pools[spawn.object.type])
 			pools[spawn.object.type] = {};
-		if (pools[spawn.type].type)
-			pools[spawn.object.type][spawn.object.id] = pools[spawn.type]._spawn(new window[spawn.object.type](spawn.object));
-		else
-			pools[spawn.object.type][spawn.object.id] = pools[spawn.type][spawn.id]._spawn(new window[spawn.object.type](spawn.object));
 
+		if (spawn.singleton)
+		{
+			console.log(spawn.type, ": spawned", spawn.object.type, "["+spawn.object.id+"]");
+			pools[spawn.object.type][spawn.object.id] = pools[spawn.type]          ._spawn(new window[spawn.object.type](spawn.object));
+		}
+		else
+		{
+			console.log(spawn.type, "["+ spawn.id +"]: spawned", spawn.object.type, "["+spawn.object.id+"]");
+			pools[spawn.object.type][spawn.object.id] = pools[spawn.type][spawn.id]._spawn(new window[spawn.object.type](spawn.object));
+		}
 	});
 
 	this._socket = socket;

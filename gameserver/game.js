@@ -6,9 +6,9 @@ exports.Player = Player;
 exports.Game = function(name) {
 	this.type = "Game";
 	var admirals = [];
-	this.players = [];
+	this.players = {};
 	this.name = name ? name : "game without a name";
-	var that = this;
+	var self = this;
 	this.interface = {
 		start: "start a new game",
 		join: "join the game"
@@ -21,12 +21,9 @@ exports.Game = function(name) {
 	}
 
 	this.join = function(player) {
-		that.players.push(player);
+		self.players[player] = self.spawn(new Player(player));
 		return {message: "success"};
 	}
 
-	this.listPlayers = function() {
-		return that.players.map(function(a) {return a.name});
-	}
 	require("./server").networkObject.call(this, arguments);
 };
