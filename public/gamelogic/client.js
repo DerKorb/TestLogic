@@ -32,7 +32,7 @@ Events = function()
 
 Client.prototype.networkObject = function(parent) {
 	var self = this;
-	console.log(parent);
+	this.interface = parent.interface;
 	if (this.template)
 	{
 		var target = false;
@@ -46,7 +46,6 @@ Client.prototype.networkObject = function(parent) {
 		{
 			$(self.html).appendTo(target2).find("button").click(function(event)
 			{
-				console.log("click", self, event);
 				self[event.target.id].call(self);
 			});
 		}
@@ -67,27 +66,26 @@ Client.prototype.networkObject = function(parent) {
 		return spawnling;
 	}
 
-    if (parent[0] && parent[0].type)
+    if (parent && parent.type)
     {
-        console.log("creating ", parent[0].type);
-        for (key in parent[0])
+        for (var key in parent)
         {
-            if (parent[0][key].type)
+            if (parent[key].type)
             {
-                this._spawn(new window[parent[0][key].type](parent[0][key]));
+                this._spawn(new window[parent[key].type](parent[key]));
             }
-            else if (typeof(parent[0][key]) == "object")
+            else if (typeof(parent[key]) == "object")
             {
-                for(id in parent[0][key])
+                for(id in parent[key])
                 {
-                    if (parent[0][key] && parent[0][key][id] && parent[0][key][id].type != "undefined" && window[parent[0][key][id].type])
+                    if (parent[key] && parent[key][id] && parent[key][id].type != "undefined" && window[parent[key][id].type])
                     {
-                        this._spawn(new window[parent[0][key][id].type](parent[0][key][id]));
+	                    this._spawn(new window[parent[key][id].type](parent[key][id]));
                     }
                 }
             }
             else
-                this[key] = parent[0][key];
+                this[key] = parent[key];
         }
 
     }
@@ -122,8 +120,8 @@ Client.prototype.initConnection = function()
 	});
 
 	socket.on("result", function(data) {
-		if (typeof(self[data.type].interface[data.command]) == "function")
-			self[data.type].interface[data.command].call(null, data.result);
+		/*if (typeof(self[data.type].[data.command]) == "function")
+			self[data.type].interface[data.command].call(null, data.result);*/
 
 	});
 	socket.on("object", function(object) {
