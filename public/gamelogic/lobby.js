@@ -3,17 +3,17 @@ Lobby = function(object)
     Events.call(this);
 	var self = this;
 	this.type = "Lobby";
-	this.template = true;
     this.on("spawn", function(object) {
         if (object.type == "Game")
         {
             $("<li>").appendTo("#game_list").text(object.id+": "+object.name);
         }
     });
-    this.on("template", function(html) {
-	    console.log(html);
-	    $("<div>").addClass(self.type).html(html).appendTo("body");
-    });
+    var myDiv = $("<div>").addClass(self.type).html($.zc("h1{Game Lobby &type}+button#create{create new game}+#game_list", {type: "test"})).appendTo("body");
+	$(myDiv).find("button").click(function(event)
+	{
+		self[event.target.id].call(self);
+	});
     client.networkObject.call(this, arguments);
 }
 
