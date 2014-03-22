@@ -59,22 +59,18 @@ Client.prototype.networkObject = function(parent) {
 		}
 	}
 	this._spawn = function(spawnling) {
-		console.log("bla", self, spawnling, pools);
 		if (!pools[spawnling.type])
 			pools[spawnling.type] = {};
 
 		if (self.singleton)
 		{
-			console.log("single", pools[self.type]);
-			pools[spawnling.type][spawnling.id] = pools[self.type]          ._spawn(new window[spawnling.type](spawnling));
+			pools[spawnling.type][spawnling.id] = spawnling;
 		}
 		else
 		{
-			console.log(spawnling);
-			pools[spawnling.type][spawnling.id]  = pools[self.type][self.id]._spawn(new window[spawnling.type](spawnling));
+			pools[spawnling.type][spawnling.id]  = spawnling;
 		}
 
-		console.log("spawning", spawnling);
 		if (!self[spawnling.type])
 			self[spawnling.type] = [];
 		self[spawnling.type].push(spawnling);
@@ -84,7 +80,6 @@ Client.prototype.networkObject = function(parent) {
 
     if (parent && parent.type)
     {
-	    console.log("parent", parent);
         for (var key in parent)
         {
             if (parent[key].type)
@@ -146,7 +141,6 @@ Client.prototype.initConnection = function()
 
 	});
 	socket.on("object", function(object) {
-		console.log("object", object);
 		if (!self[object.type])
 			self[object.type] = {};
 
@@ -173,14 +167,14 @@ Client.prototype.initConnection = function()
 		if (!pools[spawn.object.type])
 			pools[spawn.object.type] = {};
 
-		if (spawn.singleton)
+		if (pools[spawn.type].type)
 		{
 			console.log(spawn.type, ": spawned", spawn.object.type, "["+spawn.object.id+"]");
 			pools[spawn.object.type][spawn.object.id] = pools[spawn.type]          ._spawn(new window[spawn.object.type](spawn.object));
 		}
 		else
 		{
-			console.log(spawn.type, "["+ spawn.id +"]: spawned", spawn.object.type, "["+spawn.object.id+"]");
+			//console.log(spawn.type, "["+ spawn.id +"]: spawned", spawn.object.type, "["+spawn.object.id+"]", pools, pools[spawn.type][spawn.id]._spawn);
 			pools[spawn.object.type][spawn.object.id] = pools[spawn.type][spawn.id]._spawn(new window[spawn.object.type](spawn.object));
 		}
 	});
