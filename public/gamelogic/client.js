@@ -129,7 +129,10 @@ Client.prototype.initConnection = function()
 			self.spawn.call(self, object);
 	});
 	socket.on("spawn", function(spawn) {
-		console.log("spawn", spawn.object, "(", spawn.object.id, ")", "into", spawn.type, "(", spawn.id, ")");
+		if (spawn.singleton)
+			console.log(spawn.type, ": spawned", spawn.object.type, "["+spawn.object.id+"]");
+		else
+			console.log(spawn.type, "["+ spawn.id +"]: spawned", spawn.object.type, "["+spawn.object.id+"]");
 		if (!pools[spawn.object.type])
 			pools[spawn.object.type] = {};
 		if (pools[spawn.type].type)
