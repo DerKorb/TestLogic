@@ -32,6 +32,24 @@ Events = function()
 
 Client.prototype.networkObject = function(parent) {
 	var self = this;
+	if (this.template)
+	{
+		var target = false;
+		if(this.template.indexOf("->")>0)
+		{
+			target = this.template.split("->")[0];
+			this.template = this.template.split("->")[1];
+		}
+		this.html = $.zc(this.template, {});
+
+		if (target)
+			$(this.html).appendTo(target).find("button").click(function(event)
+			{
+				self[event.target.id].call(self);
+			});
+		else
+			this.emit("html", this.html);
+	}
 	this._spawn = function(spawnling) {
 		if (!self[spawnling.type])
 			self[spawnling.type] = [];
@@ -64,16 +82,6 @@ Client.prototype.networkObject = function(parent) {
         }
 
     }
-	if (this.template)
-	{
-		if (templates[self.type])
-			return self.emit("template", templates[self.type]);
-		$.get("/template/"+this.type, function(template)
-		{
-			templates[self.type] = template;
-			self.emit("template", template);
-		});
-	}
 
 	var _data = {};
 	for(key in self.interface)
