@@ -32,6 +32,11 @@ Events = function()
 
 Client.prototype.networkObject = function(parent) {
 	var self = this;
+
+	if (!pools[parent.type])
+		pools[parent.type] = {};
+	pools[parent.type][parent.id] = this;
+
 	this.interface = parent.interface;
 	if (this.template)
 	{
@@ -59,7 +64,7 @@ Client.prototype.networkObject = function(parent) {
 		}
 	}
 	this._spawn = function(spawnling) {
-		if (!pools[spawnling.type])
+		/*if (!pools[spawnling.type])
 			pools[spawnling.type] = {};
 
 		if (self.singleton)
@@ -69,7 +74,7 @@ Client.prototype.networkObject = function(parent) {
 		else
 		{
 			pools[spawnling.type][spawnling.id]  = spawnling;
-		}
+		}*/
 
 		if (!self[spawnling.type])
 			self[spawnling.type] = [];
@@ -113,6 +118,7 @@ Client.prototype.networkObject = function(parent) {
 		{
 			var data = {
 				type: this.type,
+				id: self.id,
 				command: this.key,
 				query: arguments[0]
 			}
@@ -144,38 +150,25 @@ Client.prototype.initConnection = function()
 		if (!self[object.type])
 			self[object.type] = {};
 
-		if (!pools[object.type])
-			pools[object.type] = {};
-
 		if (object.singleton)
-		{
 			self[object.type] = new window[object.type](object);
-			pools[object.type] = self[object.type];
-		}
 		else
-		{
 			self[object.type][object.id] = new window[object.type](object);
-			pools[object.type][object.id] = self[object.type][object.id];
-		}
 
 		if (typeof(self.spawn) == "function")
 			self.spawn.call(self, object);
 	});
 	socket.on("spawn", function(spawn) {
-		console.log("spawn");
 		// create a pool of the objects type if not already exists:
-		if (!pools[spawn.object.type])
-			pools[spawn.object.type] = {};
-
 		if (pools[spawn.type].type)
 		{
 			console.log(spawn.type, ": spawned", spawn.object.type, "["+spawn.object.id+"]");
-			pools[spawn.object.type][spawn.object.id] = pools[spawn.type]          ._spawn(new window[spawn.object.type](spawn.object));
+			pools[spawn.type]          ._spawn(new window[spawn.object.type](spawn.object));
 		}
 		else
 		{
-			//console.log(spawn.type, "["+ spawn.id +"]: spawned", spawn.object.type, "["+spawn.object.id+"]", pools, pools[spawn.type][spawn.id]._spawn);
-			pools[spawn.object.type][spawn.object.id] = pools[spawn.type][spawn.id]._spawn(new window[spawn.object.type](spawn.object));
+			console.log(spawn.type, "["+ spawn.id +"]: spawned", spawn.object.type, "["+spawn.object.id+"]");
+			pools[spawn.type][spawn.id]._spawn(new window[spawn.object.type](spawn.object));
 		}
 	});
 

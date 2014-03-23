@@ -55,15 +55,31 @@ var interface = {};
 
 var networkObject = function() {
 	var self = this;
+
+	// keep max id and pools up to date:
 	if (!ids[this.type])
 		ids[this.type] = 1;
 	if (!pools[this.type])
 		pools[this.type] = {};
 	this.id = ids[this.type]++;
 	pools[this.type][this.id] = this;
+
+	// Inherit Eventemmiter
 	EE = require('events').EventEmitter;
 	this.on = EE.prototype.on.bind(this);
 	this.emit = EE.prototype.emit.bind(this);
+
+	this.destroy = function()
+	{
+		for (r in this.receipients)
+		{
+			var name = receipients[r];
+			sockets_by_name[name].emit("destroy", {id: self.id, type: self.type});
+		}
+		this.emit("destroyed", {type: self.type, id: self.id});
+		delete pools[self.type][self.id];
+	}
+
 	this.spawn = function(object, receipients) {
 		if (!object.receipients)
 			object.receipients = self.receipients;
@@ -113,6 +129,12 @@ var networkObject = function() {
 	}
 
 }
+
+addToPool = function(type, id, object)
+{
+
+}
+
 exports.networkObject = networkObject;
 
 var interface = function(data)
