@@ -1,8 +1,8 @@
-exports.Player = function(name, socketId) {
+exports.Player = function(data) {
 	this.type ="Player";
 	var games = [];
-	this.name = name;
-	this.socketId = socketId;
+	this.name = data.playerName;
+	this.socketId = data.socketId;
 	this.interface = {
 		info: "query player info"
 	};

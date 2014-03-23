@@ -45,8 +45,8 @@ Lobby.prototype.logout = function(socketId)
 		if (!this.connectedPlayers[socketId])
 			return {error: "not logged in"};
 
-		this.emit("logout", this.connectedPlayers[socketId].name);
-		this.removeListener(this.connectedPlayers[socketId].name);
+		this.emit("logout", sockets[socketId].playerName);
+		this.removeListener(sockets[socketId].playerName);
 		this.connectedPlayers[socketId].socketId = false;
 		delete this.connectedPlayers[socketId];
 		return {message: "success"};

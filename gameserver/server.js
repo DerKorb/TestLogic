@@ -81,10 +81,10 @@ var networkObject = function() {
 	}
 
 	this.spawn = function(object, receipients) {
-		if (!object.receipients)
-			object.receipients = self.receipients;
+/*		if (!object.receipients)
+			object.receipients = self.receipients;*/
 		if (object.singleton)
-			this[object.type];
+			this[object.type] = object;
 		else
 		{
 			if (!this[object.type])

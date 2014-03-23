@@ -20,8 +20,9 @@ exports.Game = function(name) {
 		}
 	}
 
-	this.join = function(player) {
-		self.players[player] = self.spawn(new Player(player));
+	this.join = function(player)
+	{
+		self.spawn(new Player(player));
 		return {message: "success"};
 	}
 
