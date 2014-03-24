@@ -113,7 +113,13 @@ var networkObject = function() {
 				this[object.type] = {};
 			this[object.type][object.id] = object;
 		}
+		object.on("deleted", this._delete);
 		this.spawnCast(object);
+	}
+
+	this._delete = function(object)
+	{
+		delete self[object.type][object.id]; //todo: singleton;
 	}
 
 	this.removeChild = function(child)

@@ -63,11 +63,20 @@ Client.prototype.networkObject = function(parent) {
 			this.emit("html", this.html);
 		}
 	}
+	this.on("deleted", function()
+	{
+		if (this.html)
+			this.html.remove();
+	});
+
 	this._spawn = function(spawnling) {
 		if (!self[spawnling.type])
-			self[spawnling.type] = [];
-		self[spawnling.type].push(spawnling);
+			self[spawnling.type] = {};
+		self[spawnling.type][spawnling.id] = spawnling;
         self.emit("spawn", spawnling);
+		spawnling.on("deleted", function(data) {
+			delete self[spawnling.type][spawnling.id]; // todo: singleton
+		});
 		return spawnling;
 	}
 

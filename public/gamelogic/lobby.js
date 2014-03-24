@@ -10,10 +10,6 @@ Lobby = function(object)
 	        object.html.addTo(this.html.find("#game_list"));
     });
 
-	this.on("login", function(data)
-	{
-		console.log("jeah", data);
-	});
 	// inherit network object
     client.networkObject.call(this, object);
 }
