@@ -69,15 +69,16 @@ var networkObject = function() {
 	this.on = EE.prototype.on.bind(this);
 	this.emit = EE.prototype.emit.bind(this);
 
-	this.destroy = function()
+	this.delete = function()
 	{
 		for (r in this.receipients)
 		{
-			var name = receipients[r];
-			sockets_by_name[name].emit("destroy", {id: self.id, type: self.type});
+			var name = this.receipients[r];
+			sockets_by_name[name].emit("deleted", {id: this.id, type: this.type});
 		}
-		this.emit("destroyed", {type: self.type, id: self.id});
-		delete pools[self.type][self.id];
+		this.emit("deleted", this);
+		delete pools[this.type][this.id];
+		return {message: "success"};
 	}
 
 	this.spawn = function(object, receipients) {
@@ -92,6 +93,12 @@ var networkObject = function() {
 			this[object.type][object.id] = object;
 		}
 		this.spawnCast(object);
+	}
+
+	this.removeChild = function(child)
+	{
+		// todo: add singleton removal
+		delete self[child.type][child.id];
 	}
 
 	this.broadCast = function(receipients, object) {

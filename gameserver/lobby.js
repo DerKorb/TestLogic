@@ -52,13 +52,15 @@ Lobby.prototype.logout = function(socketId)
 		return {message: "success"};
 	}
 
-Lobby.prototype.create = function(options) {
-		if (!this.connectedPlayers[options.socketId])
-			return {error: "not logged in"};
-		this.spawn(new Game(options.name));
-		this.emit("created");
-		return {message: "success"};
-	};
+Lobby.prototype.create = function(options)
+{
+	if (!this.connectedPlayers[options.socketId])
+		return {error: "not logged in"};
+	var game = new Game(options.name);
+	this.spawn(game);
+	this.emit("created");
+	return {message: "success"};
+};
 
 Lobby.prototype.list = function(data) {
 		var gamelist = [];

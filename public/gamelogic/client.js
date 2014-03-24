@@ -64,23 +64,16 @@ Client.prototype.networkObject = function(parent) {
 		}
 	}
 	this._spawn = function(spawnling) {
-		/*if (!pools[spawnling.type])
-			pools[spawnling.type] = {};
-
-		if (self.singleton)
-		{
-			pools[spawnling.type][spawnling.id] = spawnling;
-		}
-		else
-		{
-			pools[spawnling.type][spawnling.id]  = spawnling;
-		}*/
-
 		if (!self[spawnling.type])
 			self[spawnling.type] = [];
 		self[spawnling.type].push(spawnling);
         self.emit("spawn", spawnling);
 		return spawnling;
+	}
+
+	this._delete = function(object)
+	{
+
 	}
 
     if (parent && parent.type)
@@ -172,6 +165,10 @@ Client.prototype.initConnection = function()
 		}
 	});
 
+	socket.on("event", function(event)
+	{
+		pools[event.type][event.id].emit(event.type, event.data);
+	});
 	this._socket = socket;
 }
 var client;

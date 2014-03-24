@@ -11,7 +11,8 @@ exports.Game = function(name) {
 	var self = this;
 	this.interface = {
 		start: "start a new game",
-		join: "join the game"
+		join: "join the game",
+		delete: "delete the game"
 	};
 	this.start = function(players) {
 		for(p in players)
@@ -23,8 +24,16 @@ exports.Game = function(name) {
 	this.join = function(player)
 	{
 		self.spawn(new Player(player));
+		self.emit("test", 1);
 		return {message: "success"};
 	}
+
+/*	this.delete = function()
+	{
+		console.log("deleted");
+		this.emit("deleted", this);
+		return {message: "success"};
+	}*/
 
 	require("./server").networkObject.call(this, arguments);
 };
