@@ -80,6 +80,8 @@ Client.prototype.networkObject = function(parent) {
     {
         for (var key in parent)
         {
+	        if (key == "_listeners")
+	            continue;
             if (parent[key].type)
             {
                 this._spawn(new window[parent[key].type](parent[key]));
@@ -101,8 +103,8 @@ Client.prototype.networkObject = function(parent) {
                 this[key] = parent[key];
             }
         }
-
     }
+
 
 	var _data = {};
 	for(key in self.interface)
@@ -167,7 +169,7 @@ Client.prototype.initConnection = function()
 
 	socket.on("event", function(event)
 	{
-		pools[event.type][event.id].emit(event.type, event.data);
+		pools[event.type][event.id].emit(event.event, event.data);
 	});
 	this._socket = socket;
 }

@@ -12,6 +12,7 @@ exports.start = function(_app)
 	console.log(Lobby.prototype.singleton);
 	lobby.on("login", function(playerName, socketId)
 	{
+		console.log(arguments);
 		sockets[socketId].playerName = playerName;
 		sockets_by_name[playerName] = sockets[socketId];
 	});
@@ -78,9 +79,14 @@ var networkObject = function() {
 	{
 		var tag = arguments[0];
 		var args = [].slice.call(arguments);
-		arguments.shift();
+		args.shift();
 		for(l in self._listeners[tag])
-			self._listeners[tag][l].apply(this, arguments);
+			self._listeners[tag][l].apply(this, args);
+		for (r in self.receipients)
+		{
+			var name = self.receipients[r];
+			sockets_by_name[name].emit("event", {type: self.type, id: self.id, data: args, event: tag});
+		}
 	}
 
 
