@@ -90,5 +90,8 @@ Lobby.prototype.sockets = function()
 	};
 	return result;
 }
+
+Lobby.prototype.template = "body->#Lobby>h1{Game Lobby &type}+button#create{create new game}+ul#game_list";
+
 exports.Lobby = Lobby;
 

@@ -66,8 +66,23 @@ var networkObject = function() {
 
 	// Inherit Eventemmiter
 	EE = require('events').EventEmitter;
-	this.on = EE.prototype.on.bind(this);
-	this.emit = EE.prototype.emit.bind(this);
+	var self = this;
+	this._listeners = {};
+	this.on = function(tag, callback) {
+		if (!self._listeners[tag])
+			self._listeners[tag] = [];
+		this._listeners[tag] = [callback].concat(self._listeners[tag]);
+	}
+
+	this.emit = function()
+	{
+		var tag = arguments[0];
+		var args = [].slice.call(arguments);
+		arguments.shift();
+		for(l in self._listeners[tag])
+			self._listeners[tag][l].apply(this, arguments);
+	}
+
 
 	this.delete = function()
 	{

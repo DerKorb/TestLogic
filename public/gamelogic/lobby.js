@@ -1,5 +1,6 @@
 Lobby = function(object)
 {
+	console.log(object);
 	// inherit events handler
     Events.call(this);
 	this.type = "Lobby";
@@ -8,8 +9,6 @@ Lobby = function(object)
 	    if (object.type == "Game")
 	        object.html.addTo(this.html.find("#game_list"));
     });
-
-	this.template = "body->#Lobby>h1{Game Lobby &type}+button#create{create new game}+ul#game_list";
 
 	// inherit network object
     client.networkObject.call(this, object);
