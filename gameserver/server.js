@@ -80,6 +80,7 @@ var networkObject = function() {
 		var tag = arguments[0];
 		var args = [].slice.call(arguments);
 		args.shift();
+		console.log("event", {type: self.type, id: self.id, data: args, event: tag});
 		for(l in self._listeners[tag])
 			self._listeners[tag][l].apply(this, args);
 		for (r in self.receipients)
@@ -89,14 +90,8 @@ var networkObject = function() {
 		}
 	}
 
-
 	this.delete = function()
 	{
-		for (r in this.receipients)
-		{
-			var name = this.receipients[r];
-			sockets_by_name[name].emit("deleted", {id: this.id, type: this.type});
-		}
 		this.emit("deleted", this);
 		delete pools[this.type][this.id];
 		return {message: "success"};
@@ -128,26 +123,10 @@ var networkObject = function() {
 		delete self[child.type][child.id];
 	}
 
-	this.broadCast = function(receipients, object) {
-		if (!object)
-			object = this;
-		for (r in object.receipients)
-		{
-			var name = receipients[r];
-			sockets_by_name[name].emit("object", {object: object, id: this.id, type: this.type});
-		}
-	}
-
 	this.spawnCast = function(object) {
 		if (!object)
 			object = this;
-		var receipients = object.receipients ? object.receipients : self.receipients;
-		for (r in receipients)
-		{
-			var name = receipients[r];
-			sockets_by_name[name].emit("spawn", {object: object, id: this.id, type: this.type});
-		}
-
+		this.emit("spawn", object);
 	}
 	this.addListener = function(listener)
 	{
@@ -161,11 +140,6 @@ var networkObject = function() {
 		if (this.receipients.indexOf(listener)!==-1)
 			this.receipients.splice(this.receipients.indexOf(listener),1);
 	}
-
-}
-
-addToPool = function(type, id, object)
-{
 
 }
 

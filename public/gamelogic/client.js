@@ -23,10 +23,10 @@ Events = function()
     this.emit = function()
     {
         var tag = arguments[0];
-        arguments = $.makeArray(arguments);
-        arguments.shift();
+	    var args = [].slice.call(arguments);
+	    args.shift();
         for(l in self._listeners[tag])
-            self._listeners[tag][l].apply(this, arguments);
+            self._listeners[tag][l].apply(this, args[0]);
     }
 }
 
@@ -36,6 +36,11 @@ Client.prototype.networkObject = function(parent) {
 	if (!pools[parent.type])
 		pools[parent.type] = {};
 	pools[parent.type][parent.id] = this;
+
+	this.log = function()
+	{
+		console.log.apply(console, arguments);
+	}
 
 	this.interface = parent.interface;
 	if (this.template)
@@ -67,16 +72,28 @@ Client.prototype.networkObject = function(parent) {
 	{
 		if (this.html)
 			this.html.remove();
+		delete pools[this.type][this.id] // todo: singleton
+	});
+
+	this.on("spawn", function(spawn)
+	{
+		console.log(self.type, "["+ self.id +"]: spawned", spawn.type, "["+spawn.id+"]");
+		self._spawn(new window[spawn.type](spawn));
 	});
 
 	this._spawn = function(spawnling) {
 		if (!self[spawnling.type])
 			self[spawnling.type] = {};
 		self[spawnling.type][spawnling.id] = spawnling;
-        self.emit("spawn", spawnling);
+        //self.emit("spawn", spawnling);
 		spawnling.on("deleted", function(data) {
 			delete self[spawnling.type][spawnling.id]; // todo: singleton
 		});
+		if (spawnling.target)
+		{
+			console.log(self.html.find(spawnling.target));
+			self.html.find(spawnling.target).append(spawnling.html);
+		}
 		return spawnling;
 	}
 
@@ -178,6 +195,7 @@ Client.prototype.initConnection = function()
 
 	socket.on("event", function(event)
 	{
+		//console.log("event", typeof(event.data));
 		pools[event.type][event.id].emit(event.event, event.data);
 	});
 	this._socket = socket;
