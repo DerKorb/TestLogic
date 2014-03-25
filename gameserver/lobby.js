@@ -6,7 +6,12 @@ var users = {"DerKorb": "asdfg"};
 Lobby = function() {
 	this.type = "Lobby";
 	this.singleton = true;
+	this.public = {
+		template2: "body->#Lobby>h1{Game Lobby &type}+button#create{create new game}+ul#game_list"
+	}
 	this.games = {};
+	this.template = "#Lobby>h1{Game Lobby &type}+button#create{create new game}+ul#game_list";
+	this.target = "body";
 	this.players = {};
 	this.connectedPlayers = {};
 	this.interface = {

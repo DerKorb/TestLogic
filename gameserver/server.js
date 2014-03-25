@@ -105,7 +105,7 @@ var networkObject = function() {
 		else
 		{
 			if (!this[object.type])
-				this[object.type] = {};
+				this[object.type] = {list: true};
 			this[object.type][object.id] = object;
 		}
 		object.on("deleted", this._delete);

@@ -13,6 +13,7 @@ Client.prototype.constructor = Client;
 
 Client.prototype.networkObject = function(parent) {
 	var self = this;
+	console.log(self, parent);
 	this._listeners = {};
 	this.on = function(tag, callback) {
 		if (!self._listeners[tag])
@@ -29,41 +30,36 @@ Client.prototype.networkObject = function(parent) {
 			self._listeners[tag][l].apply(this, args[0]);
 	}
 
-	if (!pools[parent.type])
-		pools[parent.type] = {};
-	pools[parent.type][parent.id] = this;
+	if (!pools[self.type])
+		pools[self.type] = {};
+	pools[self.type][self.id] = this;
 
 	this.log = function()
 	{
 		console.log.apply(console, arguments);
 	}
 
-	this.interface = parent.interface;
 	if (this.template)
 	{
-		var target = false;
-		if(this.template.indexOf("->")>0)
-		{
-			target = this.template.split("->")[0];
-			this.template = this.template.split("->")[1];
-		}
 		this.html = $.zc(this.template, {});
 		this.html.addTo = function(target2)
 		{
-			$(self.html).appendTo(self.target ? target2.find(self.target) : target2).find("button").click(function(event)
+			$(self.html).appendTo(target2 ? target2.find(self.target) : self.target).find("button").click(function(event)
 			{
 				self[event.target.id].call(self);
 			});
 		}
 
 
-		if (target)
-			this.html.addTo(target);
+
+		if (!self.isChild)
+			this.html.addTo();
 		else
 		{
 			this.emit("html", this.html);
 		}
 	}
+
 	this.on("deleted", function()
 	{
 		if (this.html)
@@ -74,10 +70,11 @@ Client.prototype.networkObject = function(parent) {
 	this.on("spawn", function(spawn)
 	{
 		console.log(self.type, "["+ self.id +"]: spawned", spawn.type, "["+spawn.id+"]");
-		self._spawn(new window[spawn.type](spawn));
+		self._spawn(client.networkObject.call(spawn));
 	});
 
 	this._spawn = function(spawnling) {
+		console.log("spawning");
 		if (!self[spawnling.type])
 			self[spawnling.type] = {};
 		self[spawnling.type][spawnling.id] = spawnling;
@@ -86,7 +83,9 @@ Client.prototype.networkObject = function(parent) {
 			delete self[spawnling.type][spawnling.id]; // todo: singleton
 		});
 		if (spawnling.target)
+		{
 			spawnling.html.addTo(self.html);
+		}
 		return spawnling;
 	}
 
@@ -95,35 +94,18 @@ Client.prototype.networkObject = function(parent) {
 
 	}
 
-    if (parent && parent.type)
+    for (var key in self)
     {
-        for (var key in parent)
-        {
-	        if (key == "_listeners")
-	            continue;
-            if (parent[key].type)
-            {
-                this._spawn(new window[parent[key].type](parent[key]));
-            }
-            else if (typeof(parent[key]) == "object")
-            {
-                for(id in parent[key])
-                {
-                    if (parent[key] && parent[key][id] && parent[key][id].type != "undefined" && window[parent[key][id].type])
-                    {
-	                    this._spawn(new window[parent[key][id].type](parent[key][id]));
-                    }
-	                else
-	                    this[key] = parent[key];
-                }
-            }
-            else
-            {
-                this[key] = parent[key];
-            }
-        }
-    }
+        if (key == "_listeners")
+            continue;
 
+        if (self[key].type)
+            this._spawn(client.networkObject.call(parent[key]));
+
+        if (self[key].list)
+            for(id in self[key])
+                this._spawn(client.networkObject.call(self[key][id]));
+    }
 
 	var _data = {};
 	for(key in self.interface)
@@ -139,6 +121,7 @@ Client.prototype.networkObject = function(parent) {
 			client._socket.emit("interface", data);
 		}.bind({key: key, type: self.type});
 	}
+	return this;
 }
 Client.prototype.initConnection = function()
 {
@@ -165,9 +148,9 @@ Client.prototype.initConnection = function()
 			self[object.type] = {};
 
 		if (object.singleton)
-			self[object.type] = new window[object.type](object);
+			self[object.type] = self.networkObject.call(object);
 		else
-			self[object.type][object.id] = new window[object.type](object);
+			self[object.type][object.id] = self.networkObject.call(object);
 
 		if (typeof(self.spawn) == "function")
 			self.spawn.call(self, object);
@@ -177,12 +160,12 @@ Client.prototype.initConnection = function()
 		if (pools[spawn.type].type)
 		{
 			console.log(spawn.type, ": spawned", spawn.object.type, "["+spawn.object.id+"]");
-			pools[spawn.type]          ._spawn(new window[spawn.object.type](spawn.object));
+			pools[spawn.type]          ._spawn(self.networkObject.call(spawn.object));
 		}
 		else
 		{
 			console.log(spawn.type, "["+ spawn.id +"]: spawned", spawn.object.type, "["+spawn.object.id+"]");
-			pools[spawn.type][spawn.id]._spawn(new window[spawn.object.type](spawn.object));
+			pools[spawn.type][spawn.id]._spawn(self.networkObject.call(spawn.object));
 		}
 	});
 
