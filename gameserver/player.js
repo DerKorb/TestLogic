@@ -7,6 +7,10 @@ exports.Player = function(data) {
 		info: "query player info"
 	};
 
+	this.template = "li{"+data.playerName+"}";
+	this.target = "#player_list";
+	this.isChild = true;
+
 	require("./server").networkObject.call(this, arguments);
 };
 

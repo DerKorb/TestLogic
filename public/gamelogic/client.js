@@ -13,7 +13,6 @@ Client.prototype.constructor = Client;
 
 Client.prototype.networkObject = function(parent) {
 	var self = this;
-	console.log(self, parent);
 	this._listeners = {};
 	this.on = function(tag, callback) {
 		if (!self._listeners[tag])
@@ -50,14 +49,10 @@ Client.prototype.networkObject = function(parent) {
 			});
 		}
 
-
-
 		if (!self.isChild)
 			this.html.addTo();
 		else
-		{
 			this.emit("html", this.html);
-		}
 	}
 
 	this.on("deleted", function()
@@ -74,7 +69,6 @@ Client.prototype.networkObject = function(parent) {
 	});
 
 	this._spawn = function(spawnling) {
-		console.log("spawning");
 		if (!self[spawnling.type])
 			self[spawnling.type] = {};
 		self[spawnling.type][spawnling.id] = spawnling;
