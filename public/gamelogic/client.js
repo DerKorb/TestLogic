@@ -11,7 +11,8 @@ var Client = function(options)
 Client.prototype.constructor = Client;
 
 
-Client.prototype.networkObject = function(parent) {
+Client.prototype.networkObject = function() {
+	console.log(this);
 	var self = this;
 	this._listeners = {};
 	this.on = function(tag, callback) {
@@ -38,27 +39,13 @@ Client.prototype.networkObject = function(parent) {
 		console.log.apply(console, arguments);
 	}
 
-	if (this.template)
-	{
-		this.html = $.zc(this.template, {});
-		this.html.addTo = function(target2)
-		{
-			$(self.html).appendTo(target2 ? target2.find(self.target) : self.target).find("button").click(function(event)
-			{
-				self[event.target.id].call(self);
-			});
-		}
+	this.displayModule = new htmlModule(this);
 
-		if (!self.isChild)
-			this.html.addTo();
-		else
-			this.emit("html", this.html);
-	}
+	self.displayModule.init();
 
 	this.on("deleted", function()
 	{
-		if (this.html)
-			this.html.remove();
+		self.displayModule.delete();
 		delete pools[this.type][this.id] // todo: singleton
 	});
 
@@ -76,16 +63,8 @@ Client.prototype.networkObject = function(parent) {
 		spawnling.on("deleted", function(data) {
 			delete self[spawnling.type][spawnling.id]; // todo: singleton
 		});
-		if (spawnling.target)
-		{
-			spawnling.html.addTo(self.html);
-		}
+		self.displayModule.spawn(spawnling);
 		return spawnling;
-	}
-
-	this._delete = function(object)
-	{
-
 	}
 
     for (var key in self)
@@ -172,12 +151,16 @@ Client.prototype.initConnection = function()
 }
 var client;
 $(function() {
-	client = new Client({spawn: function(object) {
+	client = new Client(
+	{
+		spawn: function(object)
+		{
 			if (object.type == "Lobby")
 			{
 				this.Lobby.login({user: "DerKorb", pwd: "asdfg"});
 			}
-	}});
+		}
+	});
 });
 
 

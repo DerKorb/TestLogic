@@ -1,15 +1,10 @@
 extends layout
 
 block head
-  script(src="/javascripts/jquery.js")
+  script(src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js")
+  script(src="//cdnjs.cloudflare.com/ajax/libs/three.js/r66/three.min.js")
   script(src="/javascripts/zencoding.js")
   script(src="/javascripts/socket.io.js")
-  script(src="/gamelogic/lobby.js")
+  script(src="/renderer/html.js")
+  script(src="/renderer/renderer.js")
   script(src="/gamelogic/client.js")
-  script(src="/gamelogic/game.js")
-  script(src="/gamelogic/player.js")
-
-//block content
-  h1 Game lobby
-  button(action="/lobby/create") create new game
-  ul#game_list

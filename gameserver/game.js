@@ -31,6 +31,7 @@ exports.Game = function(name) {
 		return {message: "success"};
 	}
 
+
 /*	this.delete = function()
 	{
 		console.log("deleted");
