@@ -10,6 +10,7 @@ Lobby = function() {
 		template2: "body->#Lobby>h1{Game Lobby &type}+button#create{create new game}+ul#game_list"
 	}
 	this.games = {};
+	this.displayModule = "htmlModule";
 	this.template = "#Lobby>h1{Game Lobby &type}+button#create{create new game}+ul#game_list";
 	this.target = "body";
 	this.players = {};

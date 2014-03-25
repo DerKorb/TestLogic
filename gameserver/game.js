@@ -8,6 +8,7 @@ exports.Game = function(name) {
 	var admirals = [];
 	this.players = {};
 	this.name = name ? name : "game without a name";
+	this.displayModule = "htmlModule";
 	this.template = "li>{"+this.name+"}+button#delete{delete this game}+button#join{join this game}+ul#player_list";
 	this.target = "#game_list";
 	this.isChild = true;

@@ -39,7 +39,7 @@ Client.prototype.networkObject = function() {
 		console.log.apply(console, arguments);
 	}
 
-	this.displayModule = new htmlModule(this);
+	this.displayModule = new window[this.displayModule](this);
 
 	self.displayModule.init();
 
