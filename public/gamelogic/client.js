@@ -10,28 +10,24 @@ var Client = function(options)
 };
 Client.prototype.constructor = Client;
 
-Events = function()
-{
-    var self = this;
-    this._listeners = {};
-    this.on = function(tag, callback) {
-        if (!self._listeners[tag])
-            self._listeners[tag] = [];
-        this._listeners[tag] = [callback].concat(self._listeners[tag]);
-    }
-
-    this.emit = function()
-    {
-        var tag = arguments[0];
-	    var args = [].slice.call(arguments);
-	    args.shift();
-        for(l in self._listeners[tag])
-            self._listeners[tag][l].apply(this, args[0]);
-    }
-}
 
 Client.prototype.networkObject = function(parent) {
 	var self = this;
+	this._listeners = {};
+	this.on = function(tag, callback) {
+		if (!self._listeners[tag])
+			self._listeners[tag] = [];
+		this._listeners[tag] = [callback].concat(self._listeners[tag]);
+	}
+
+	this.emit = function()
+	{
+		var tag = arguments[0];
+		var args = [].slice.call(arguments);
+		args.shift();
+		for(l in self._listeners[tag])
+			self._listeners[tag][l].apply(this, args[0]);
+	}
 
 	if (!pools[parent.type])
 		pools[parent.type] = {};
@@ -54,7 +50,7 @@ Client.prototype.networkObject = function(parent) {
 		this.html = $.zc(this.template, {});
 		this.html.addTo = function(target2)
 		{
-			$(self.html).appendTo(target2).find("button").click(function(event)
+			$(self.html).appendTo(self.target ? target2.find(self.target) : target2).find("button").click(function(event)
 			{
 				self[event.target.id].call(self);
 			});
@@ -90,10 +86,7 @@ Client.prototype.networkObject = function(parent) {
 			delete self[spawnling.type][spawnling.id]; // todo: singleton
 		});
 		if (spawnling.target)
-		{
-			console.log(self.html.find(spawnling.target));
-			self.html.find(spawnling.target).append(spawnling.html);
-		}
+			spawnling.html.addTo(self.html);
 		return spawnling;
 	}
 
