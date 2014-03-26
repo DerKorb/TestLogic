@@ -27,18 +27,19 @@ exports.Game = function(name) {
 
 	this.join = function(player)
 	{
+		if (self.Player)
+		{
+			for (id in self.Player)
+			{
+				if (self.Player[id].name == player.playerName)
+				{
+					return {error: "already joined this game"};
+				}
+			}
+		}
 		self.spawn(new Player(player));
-		self.emit("test", 1);
 		return {message: "success"};
 	}
-
-
-/*	this.delete = function()
-	{
-		console.log("deleted");
-		this.emit("deleted", this);
-		return {message: "success"};
-	}*/
 
 	require("./server").networkObject.call(this, arguments);
 };

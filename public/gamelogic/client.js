@@ -12,7 +12,6 @@ Client.prototype.constructor = Client;
 
 
 Client.prototype.networkObject = function() {
-	console.log(this);
 	var self = this;
 	this._listeners = {};
 	this.on = function(tag, callback) {
@@ -39,13 +38,16 @@ Client.prototype.networkObject = function() {
 		console.log.apply(console, arguments);
 	}
 
-	this.displayModule = new window[this.displayModule](this);
+	if( self.displayModule )
+		self.displayModule = new window[self.displayModule](this);
 
-	self.displayModule.init();
+	if( self.displayModule )
+		self.displayModule.init();
 
 	this.on("deleted", function()
 	{
-		self.displayModule.delete();
+		if( self.displayModule )
+			self.displayModule.delete();
 		delete pools[this.type][this.id] // todo: singleton
 	});
 
@@ -63,7 +65,8 @@ Client.prototype.networkObject = function() {
 		spawnling.on("deleted", function(data) {
 			delete self[spawnling.type][spawnling.id]; // todo: singleton
 		});
-		self.displayModule.spawn(spawnling);
+		if( self.displayModule )
+			self.displayModule.spawn(spawnling);
 		return spawnling;
 	}
 
