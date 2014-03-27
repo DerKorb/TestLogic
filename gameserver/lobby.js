@@ -1,23 +1,21 @@
 var Game = require("./game").Game;
 var Player = require("./player").Player;
+var Bla = require("./bla").Bla;
 
 var users = {"DerKorb": "asdfg"};
 
 Lobby = function() {
 	this.type = "Lobby";
 	this.singleton = true;
-	this.public = {
-		template2: "body->#Lobby>h1{Game Lobby &type}+button#create{create new game}+ul#game_list"
-	}
-	this.games = {};
 	this.displayModule = "htmlModule";
-	this.template = "#Lobby>h1{Game Lobby &type}+button#create{create new game}+ul#game_list";
+	this.template = "#Lobby>h1{Game Lobby &type}+button#create{create new game}+button#addbla{create new bla}+ul#game_list+#blas";
 	this.target = "body";
 	this.players = {};
 	this.connectedPlayers = {};
 	this.interface = {
 		login: "login using your user data",
 		create: "create a new game",
+		addbla: "create a new game",
 		join: "join a game"
 	};
 	require("./server").networkObject.call(this, arguments);
@@ -68,35 +66,21 @@ Lobby.prototype.create = function(options)
 	return {message: "success"};
 };
 
-Lobby.prototype.list = function(data) {
-		var gamelist = [];
-		for(id in this.Game)
-		{
-			gamelist.push({name: this.Game[id].name, id: id, players: this.Game[id].listPlayers()});
-		}
-		return gamelist;
-	};
-
-Lobby.prototype.join = function(options)
-	{
-		if (!connectedPlayers[options.socketId])
-			return {error: "not logged in"};
-		if (!games[options.gameId])
-			return {error: "no such game"};
-		games[options.gameId].join(connectedPlayers[options.socketId]);
-		return {message: "success"};
-	}
-
-Lobby.prototype.sockets = function()
+Lobby.prototype.addbla = function()
 {
-	result = [];
-	for(key in this.connectedPlayers)
-	{
-		result.push(this.connectedPlayers[key].socketId);
-	};
-	return result;
+	this.spawn(new Bla);
+	return {};
 }
 
+Lobby.prototype.join = function(options)
+{
+	if (!connectedPlayers[options.socketId])
+		return {error: "not logged in"};
+	if (!games[options.gameId])
+		return {error: "no such game"};
+	games[options.gameId].join(connectedPlayers[options.socketId]);
+	return {message: "success"};
+}
 
 exports.Lobby = Lobby;
 

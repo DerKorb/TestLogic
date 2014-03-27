@@ -97,6 +97,8 @@ Client.prototype.networkObject = function() {
 			client._socket.emit("interface", data);
 		}.bind({key: key, type: self.type});
 	}
+	if (typeof(window[this.type]) == "function")
+		window.this[type].call(this, arguments);
 	return this;
 }
 Client.prototype.initConnection = function()
