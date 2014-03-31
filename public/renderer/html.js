@@ -23,7 +23,7 @@ function htmlModule(self)
 
 	this.spawn = function(spawnling)
 	{
-		if (spawnling.target)
+		if (spawnling.target && spawnling.html)
 			spawnling.html.addTo(self.html);
 	}
 

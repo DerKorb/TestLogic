@@ -1,5 +1,8 @@
 exports.Admiral = function() {
 	this.type = "Admiral";
+	this.displayModule = "threeJSModule";
+	this.isChild = true;
+
 	this.position = {
 		x: 0,
 		y: 0,

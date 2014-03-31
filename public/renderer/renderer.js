@@ -1,35 +1,26 @@
-var renderer = function(parent)
+var threeJSModule = function(options)
 {
-	this.scene = new THREE.Scene();
-	this.camera = new THREE.PerspectiveCamera( 30, window.innerWidth / window.innerHeight, 1, 10000 );
-	this.camera.position.y = 50;
-	this.camera.position.z = 1500;
-	this.renderer = renderer = new THREE.WebGLRenderer( { antialias: true } );
-	this.scene.add( this.camera );
-	if (parent)
-	{
-		renderer.setSize( parent.innerWidth, parent.innerHeight );
-		parent.appendChild( this.renderer.domElement );
-	}
-}
+	this.init = function() {
+		console.log("Init");
+		console.log(options);
+		if (options.canvas && $(options.target)) {
+			this.canvas = $("<div>").css("width", 1000).css("height", 500).css("border", "1px solid red").appendTo(options.target);
+			this.scene = new THREE.Scene();
+			this.camera = new THREE.PerspectiveCamera(30, this.canvas.innerWidth() / this.canvas.innerHeight(), 1, 10000);
+			this.camera.position.y = 50;
+			this.camera.position.z = 1500;
+			this.renderer = new THREE.WebGLRenderer({ antialias: true });
+			this.scene.add(this.camera);
+			this.renderer.setSize(this.canvas.innerWidth(), this.canvas.innerHeight());
+			this.canvas.append($(this.renderer.domElement));
+		}
 
-renderer.renderObject = function()
-{
-	var self = this;
-	this._listeners = {};
-	this.on = function(tag, callback) {
-		if (!self._listeners[tag])
-			self._listeners[tag] = [];
-		this._listeners[tag] = [callback].concat(self._listeners[tag]);
+		this.node = new THREE.Object3D();
 	}
 
-	this.emit = function()
+	this.spawn = function(spawnling)
 	{
-		var tag = arguments[0];
-		var args = [].slice.call(arguments);
-		args.shift();
-		for(l in self._listeners[tag])
-			self._listeners[tag][l].apply(this, args[0]);
+		if (spawnling.node)
+			this.node.add(spawnling.node);
 	}
-	this.group = THREE.Object3D();
 }

@@ -1,12 +1,13 @@
 var Admiral = require("./admiral").Admiral;
 var Player = require("./player").Player;
+var Game = require("./game").Game;
 exports.Admiral = Admiral;
 exports.Player = Player;
 
 exports.GameLobby = function(name) {
 	this.type = "GameLobby";
 	var admirals = [];
-	this.players = {};
+	this.players = [];
 	this.name = name ? name : "game without a name";
 	this.displayModule = "htmlModule";
 	this.template = "li>{"+this.name+"}+button#delete{delete this game}+button#join{join this game}+button#start{start this game}+ul#player_list";
@@ -23,7 +24,11 @@ exports.GameLobby = function(name) {
 	this.start = function(player) {
 		if (player.playerName != self.host)
 			return {error: "only host can start this game"};
-		return {};
+
+		var game = new Game({Player: this.Player});
+		game.start();
+		this.spawn(game, this.players);
+		return {message: "game started"};
 	}
 
 	this.join = function(player)

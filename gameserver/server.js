@@ -103,15 +103,17 @@ var networkObject = function() {
 	this.spawn = function(object, receipients) {
 		if (!object.receipients)
 			object.receipients = self.receipients;
-		if (object.singleton)
-			this[object.type] = object;
-		else
+		if (object.isChild)
 		{
-			if (!this[object.type])
-				this[object.type] = {list: true};
-			this[object.type][object.id] = object;
+			if (object.singleton)
+				this[object.type] = object;
+			else {
+				if (!this[object.type])
+					this[object.type] = {list: true};
+				this[object.type][object.id] = object;
+			}
+			object.on("deleted", this._delete);
 		}
-		object.on("deleted", this._delete);
 		this.spawnCast(object);
 	}
 
