@@ -1,8 +1,13 @@
-GameLobby = function(_data)
+var GameLobby = function()
 {
-	this.on("update", function(changes)
+	this.illustrate = function(changes)
 	{
+		//if (changes.host == me)
+		this.html.find("#start").hide();
 		if (changes.host)
-			console.log(this.html);
-	})
+			this.html.find("li[html~='"+changes.host+"']").css("color", "blue");
+	};
+	this.illustrate(this);
+	this.on("update", this.illustrate);
 };
+

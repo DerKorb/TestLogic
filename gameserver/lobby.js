@@ -5,18 +5,21 @@ var Bla = require("./bla").Bla;
 var users = {"DerKorb": "asdfg"};
 
 Lobby = function() {
-	this.type = "Lobby";
-	this.singleton = true;
-	this.displayModule = "htmlModule";
-	this.template = "#Lobby>h1{GameLobby Lobby &type}+button#create{create new game}+button#addbla{create new bla}+ul#game_list+#blas";
-	this.target = "body";
-	this.players = {};
-	this.connectedPlayers = {};
-	this.interface = {
-		login: "login using your user data",
-		create: "create a new game",
-		join: "join a game"
-	};
+	this.public =
+	{
+		type: "Lobby",
+		singleton: true,
+		displayModule: "htmlModule",
+		template: "#Lobby>h1{GameLobby Lobby &type}+button#create{create new game}+button#addbla{create new bla}+ul#game_list+#blas",
+		target: "body",
+		players: {},
+		connectedPlayers: {},
+		interface: {
+			login: "login using your user data",
+			create: "create a new game",
+			join: "join a game"
+		}
+	}
 	require("./server").networkObject.call(this, arguments);
 }
 
