@@ -1,4 +1,4 @@
-var Game = require("./game").Game;
+var GameLobby = require("./gamelobby").GameLobby;
 var Player = require("./player").Player;
 var Bla = require("./bla").Bla;
 
@@ -8,14 +8,13 @@ Lobby = function() {
 	this.type = "Lobby";
 	this.singleton = true;
 	this.displayModule = "htmlModule";
-	this.template = "#Lobby>h1{Game Lobby &type}+button#create{create new game}+button#addbla{create new bla}+ul#game_list+#blas";
+	this.template = "#Lobby>h1{GameLobby Lobby &type}+button#create{create new game}+button#addbla{create new bla}+ul#game_list+#blas";
 	this.target = "body";
 	this.players = {};
 	this.connectedPlayers = {};
 	this.interface = {
 		login: "login using your user data",
 		create: "create a new game",
-		addbla: "create a new game",
 		join: "join a game"
 	};
 	require("./server").networkObject.call(this, arguments);
@@ -60,7 +59,7 @@ Lobby.prototype.create = function(options)
 {
 	if (!this.connectedPlayers[options.socketId])
 		return {error: "not logged in"};
-	var game = new Game(options.name);
+	var game = new GameLobby(options.name);
 	this.spawn(game);
 	this.emit("created");
 	return {message: "success"};

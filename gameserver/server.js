@@ -1,5 +1,5 @@
 io = require('socket.io').listen(1337, {log: false});
-Game = require("./game");
+Game = require("./gamelobby");
 Lobby = require("./lobby").Lobby;
 sockets = {};
 var sockets_by_name = {};
@@ -92,6 +92,12 @@ var networkObject = function() {
 		this.emit("deleted", this);
 		delete pools[this.type][this.id];
 		return {message: "success"};
+	}
+
+	this.set = function(changes) {
+		for (key in changes)
+			self[key] = changes[key];
+		self.emit("update", changes);
 	}
 
 	this.spawn = function(object, receipients) {

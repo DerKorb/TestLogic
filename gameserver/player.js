@@ -1,5 +1,4 @@
 exports.Player = function(data) {
-	this.test = "test";
 	this.type ="Player";
 	var games = [];
 	this.name = data.playerName;

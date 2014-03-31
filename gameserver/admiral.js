@@ -9,5 +9,5 @@ exports.Admiral = function() {
 	{
 		return {ok: 0};
 	}
-	require("./interface").networkObject.call(this, arguments);
+	require("./server").networkObject.call(this, arguments);
 };

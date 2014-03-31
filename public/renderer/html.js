@@ -31,5 +31,10 @@ function htmlModule(self)
 	{
 		self.html.remove();
 	}
+
+	this.update = function()
+	{
+
+	}
 }
 

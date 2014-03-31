@@ -44,6 +44,13 @@ Client.prototype.networkObject = function() {
 	if( self.displayModule )
 		self.displayModule.init();
 
+	this.on("update", function(changes)
+	{
+		console.log(changes);
+		for (key in changes)
+			self[key] = changes[key];
+	});
+
 	this.on("deleted", function()
 	{
 		if( self.displayModule )
@@ -97,8 +104,9 @@ Client.prototype.networkObject = function() {
 			client._socket.emit("interface", data);
 		}.bind({key: key, type: self.type});
 	}
+
 	if (typeof(window[this.type]) == "function")
-		window.this[type].call(this, arguments);
+		window[this.type].call(this);
 	return this;
 }
 Client.prototype.initConnection = function()
