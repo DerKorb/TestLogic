@@ -114,7 +114,7 @@ Client.prototype.networkObject = function ()
 Client.prototype.initConnection = function ()
 {
 	var self = this;
-	var socket = io.connect(location.href.split(":")[0]+":1337");
+	var socket = io.connect(location.href.replace(":3000/", "")+":1337");
 
 	socket.on("message", function (message)
 	{
