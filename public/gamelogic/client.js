@@ -39,7 +39,7 @@ Client.prototype.networkObject = function() {
 	}
 
 	if( self.displayModule )
-		self.displayModule = new window[self.displayModule](this);
+		self.displayModule = window[self.displayModule].call(this);
 
 	if( self.displayModule )
 		self.displayModule.init();
@@ -79,9 +79,8 @@ Client.prototype.networkObject = function() {
 
     for (var key in self)
     {
-        if (key == "_listeners")
+        if (key == "_listeners" || key == "displayModule"); // todo: allow array of modules
             continue;
-
         if (self[key].type)
             this._spawn(client.networkObject.call(parent[key]));
 
@@ -130,7 +129,6 @@ Client.prototype.initConnection = function()
 
 	});
 	socket.on("object", function(object) {
-		console.log(object);
 		if (!self[object.type])
 			self[object.type] = {};
 

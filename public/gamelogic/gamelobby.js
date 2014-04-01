@@ -2,7 +2,6 @@ var GameLobby = function()
 {
 	this.illustrate = function(changes)
 	{
-		console.log(me, changes.host);
 		if (changes.host != me)
 			this.html.find("#start").hide();
 		else

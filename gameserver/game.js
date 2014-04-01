@@ -5,6 +5,7 @@ Game = function(options) {
 //	this.template = "#Lobby>h1{GameLobby Lobby &type}+button#create{create new game}+button#addbla{create new bla}+ul#game_list+#blas";
 	this.target = "body";
 	this.canvas = true;
+	this.regular = {n: 6, radius: 100};
 	this.interface = {
 	};
 

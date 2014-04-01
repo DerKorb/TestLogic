@@ -1,5 +1,6 @@
-function htmlModule(self)
+function htmlModule()
 {
+	var self = this;
 	this.init = function()
 	{
 		if (self.template)
@@ -32,9 +33,10 @@ function htmlModule(self)
 		self.html.remove();
 	}
 
-	this.update = function()
+	this.displayModule.update = function()
 	{
 
 	}
+	return this;
 }
 
