@@ -1,7 +1,7 @@
-var Admiral = require("./admiral").Admiral;
+var Admiral = require("./admiral").Tile;
 var Player = require("./player").Player;
 var Game = require("./game").Game;
-exports.Admiral = Admiral;
+exports.Tile = Admiral;
 exports.Player = Player;
 
 exports.GameLobby = function(name) {

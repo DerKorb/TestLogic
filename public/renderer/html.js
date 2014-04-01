@@ -21,7 +21,6 @@ function htmlModule()
 
 	this.spawn = function(spawnling)
 	{
-		console.log(spawnling.html);
 		if (spawnling.target && spawnling.html)
 			spawnling.html.addTo(self.html);
 	}

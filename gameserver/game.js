@@ -1,4 +1,4 @@
-Admiral = require("./admiral").Admiral;
+Tile = require("./tile").Tile;
 Game = function(options) {
 	this.type = "Game";
 	this.displayModule = "threeJSModule";
@@ -16,7 +16,7 @@ Game.prototype.start = function()
 {
 	for (var x = -12; x<13; x++)
 		for (var z = -12; z<13; z++)
-			this.spawn(new Admiral({position: {x: x*18+(z%2?8:0), y: 0, z: z*16}}));
+			this.spawn(new Tile({position: {x: x*18+(z%2?9:0), y: 0, z: z*16}}));
 }
 
 exports.Game = Game;

@@ -1,5 +1,5 @@
 exports.Tile = function(options) {
-	this.type = "Admiral";
+	this.type = "Tile";
 	this.displayModule = "threeJSModule";
 	this.isChild = true;
 	this.regular = {n: 6, radius: 9};

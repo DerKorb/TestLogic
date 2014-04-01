@@ -1,35 +1,16 @@
+var materials =
+{
+	lightblue: new THREE.MeshBasicMaterial({color: "lightblue"}),
+	blue: new THREE.MeshBasicMaterial({color: "blue"})
+}
+
 var threeJSModule = function()
 {
 	var options = this;
-	this.createGeometry = function(n, circumradius) {
-		var geometry = new THREE.Geometry(),
-			vertices = [],
-			faces = [],
-			x;
-
-		// Generate the vertices of the n-gon.
-		for (x = 1; x <= n; x++) {
-			geometry.vertices.push(new THREE.Vector3(
-					circumradius * Math.sin((Math.PI / n) + (x * ((2 * Math.PI)/ n))),
-					circumradius * Math.cos((Math.PI / n) + (x * ((2 * Math.PI)/ n))),
-				0
-			));
-		}
-
-		// Generate the faces of the n-gon.
-		for (x = 0; x < n-2; x++) {
-			geometry.faces.push(new THREE.Face3(0, x + 1, x + 2));
-		}
-
-		geometry.computeBoundingSphere();
-
-		return geometry;
-	}
-
 	this.init = function() {
 		var self = this;
 		if (self.canvas && $(self.target)) {
-			this.canvas = $("<div>").css("width", 1000).css("height", 500).css("border", "1px solid red");
+			this.canvas = $("<div>").css("width", 1000).css("height", 500);
 			this.canvas.addTo = function(target2)
 			{
 				$(self.html).appendTo(target2 ? target2.find(self.target) : self.target);
@@ -40,8 +21,8 @@ var threeJSModule = function()
 			this.scene = new THREE.Scene();
 			this.camera = new THREE.PerspectiveCamera(30, this.canvas.innerWidth() / this.canvas.innerHeight(), 1, 10000);
 			//*this.camera.position.y = 50;
-			this.camera.position.y = 200;
-			this.camera.position.z = 0;
+			this.camera.position.y = 120;
+			this.camera.position.z = 250;
 			this.camera.lookAt(new THREE.Vector3(0,0,0));
 			this.renderer = new THREE.WebGLRenderer({ antialias: true });
 			this.scene.add(this.camera);
@@ -59,9 +40,13 @@ var threeJSModule = function()
 
 		if (this.regular) {
 			var geometry = new THREE.CylinderGeometry( self.regular.radius, self.regular.radius, 2, self.regular.n, 1 );
-			var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
-			var cylinder = new THREE.Mesh( geometry, material );
+			var geometry2 = new THREE.CylinderGeometry( self.regular.radius+0.7, self.regular.radius, 1, self.regular.n, 1 );
+			var cylinder = new THREE.Mesh( geometry, materials["lightblue"] );
 			cylinder.position = this.position;
+			this.node.add( cylinder );
+			cylinder = new THREE.Mesh( geometry2, materials["blue"] );
+			cylinder.position = this.position;
+			cylinder.position.y+=0.1;
 			this.node.add( cylinder );
 
 		}
