@@ -1,6 +1,6 @@
-var GameLobby = function()
+var GameLobby = function ()
 {
-	this.illustrate = function(changes)
+	this.illustrate = function (changes)
 	{
 		if (changes.host != me)
 			this.html.find("#start").hide();
@@ -8,7 +8,7 @@ var GameLobby = function()
 			this.html.find("#start").show();
 
 		if (changes.host)
-			this.html.find("li[html~='"+changes.host+"']").css("color", "blue");
+			this.html.find("li[html~='" + changes.host + "']").css("color", "blue");
 	};
 	this.illustrate(this);
 	this.on("update", this.illustrate);

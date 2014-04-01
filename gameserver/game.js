@@ -3,9 +3,9 @@ Game = function(options) {
 	this.type = "Game";
 	this.displayModule = "threeJSModule";
 //	this.template = "#Lobby>h1{GameLobby Lobby &type}+button#create{create new game}+button#addbla{create new bla}+ul#game_list+#blas";
-	this.target = "body";
+	this.isChild = true;
+	this.target = "#game";
 	this.canvas = true;
-	this.regular = {n: 6, radius: 100};
 	this.interface = {
 	};
 
@@ -14,7 +14,9 @@ Game = function(options) {
 
 Game.prototype.start = function()
 {
-	this.spawn(new Admiral());
+	for (var x = -12; x<13; x++)
+		for (var z = -12; z<13; z++)
+			this.spawn(new Admiral({position: {x: x*18+(z%2?8:0), y: 0, z: z*16}}));
 }
 
 exports.Game = Game;

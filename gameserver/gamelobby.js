@@ -10,7 +10,7 @@ exports.GameLobby = function(name) {
 	this.players = [];
 	this.name = name ? name : "game without a name";
 	this.displayModule = "htmlModule";
-	this.template = "li>{"+this.name+"}+button#delete{delete this game}+button#join{join this game}+button#start{start this game}+ul#player_list";
+	this.template = "li>{"+this.name+"}+button#delete{delete this game}+button#join{join this game}+button#start{start this game}+ul#player_list+#game";
 	this.target = "#game_list";
 	this.isChild = true;
 	this.host = false;
@@ -27,7 +27,7 @@ exports.GameLobby = function(name) {
 
 		var game = new Game({Player: this.Player});
 		game.start();
-		this.spawn(game, this.players);
+		self.spawn(game, this.players);
 		return {message: "game started"};
 	}
 

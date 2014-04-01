@@ -16,14 +16,12 @@ function htmlModule()
 
 			if (!self.isChild)
 				self.html.addTo();
-			else
-				self.emit("html", self.html);
-
 		}
 	}
 
 	this.spawn = function(spawnling)
 	{
+		console.log(spawnling.html);
 		if (spawnling.target && spawnling.html)
 			spawnling.html.addTo(self.html);
 	}

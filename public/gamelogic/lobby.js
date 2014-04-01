@@ -1,7 +1,8 @@
 var me = "DerKorb";
-Lobby = function(object)
+Lobby = function (object)
 {
-	this.on("login", function(data) {
+	this.on("login", function (data)
+	{
 		me = data;
 	});
 }
