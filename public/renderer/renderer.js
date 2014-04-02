@@ -52,9 +52,9 @@ var threeJSModule = function()
 		}
 		if (this.cube) {
 			var geometry = new THREE.CubeGeometry( self.cube.w, self.cube.h, self.cube.l);
-			var cylinder = new THREE.Mesh( geometry, materials["lightblue"] );
-			cylinder.position = this.position;
-			this.node.add( cylinder );
+			var cube = new THREE.Mesh( geometry, materials["red"] );
+			cube.position = this.position;
+			this.node.add( cube );
 		}
 	}
 

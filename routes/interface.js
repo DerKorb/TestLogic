@@ -4,7 +4,6 @@ initClass = function(name, params) {
         this.id = Math.random();
         for(key in params)
         {
-            console.log(key);
             this[key] = params[key];
         }
     }

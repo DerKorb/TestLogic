@@ -21,7 +21,6 @@ Game.prototype.start = function()
 		for (var z = -2; z<3; z++)
 			this.spawn(new Tile({position: {x: x*18+(z%2?9:0), y: 0, z: z*16}}));
 
-	console.log(this.Player);
 	for (k in this.Player)
 		this.spawn(new Unit({position: {x: k*100-150, y: 20, z: 20}, owner: this.Player[k].name}));
 }
