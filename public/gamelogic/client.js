@@ -48,7 +48,6 @@ Client.prototype.networkObject = function ()
 
 	this.on("update", function (changes)
 	{
-		console.log(changes);
 		for (key in changes)
 			self[key] = changes[key];
 	});
@@ -114,7 +113,7 @@ Client.prototype.networkObject = function ()
 Client.prototype.initConnection = function ()
 {
 	var self = this;
-	var socket = io.connect("http://localhost:1337");
+	var socket = io.connect("http://"+document.domain+":1337");
 
 	socket.on("message", function (message)
 	{
