@@ -7,6 +7,7 @@ Game = function(options) {
 	this.target = "#game";
 	this.canvas = true;
 	this.interface = {
+
 	};
 
 	require("./server").networkObject.call(this, arguments);

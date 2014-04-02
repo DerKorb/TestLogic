@@ -15,6 +15,7 @@ exports.GameLobby = function(name) {
 	this.isChild = true;
 	this.host = false;
 	var self = this;
+	this.status = "waiting";
 	this.interface = {
 		start: "start a new game",
 		join: "join the game",
@@ -22,8 +23,13 @@ exports.GameLobby = function(name) {
 	};
 
 	this.start = function(player) {
+		if (this.status!="waiting")
+			return {error: "already running"};
+		this.set({status: "running"});
+
 		if (player.playerName != self.host)
 			return {error: "only host can start this game"};
+
 
 		var game = new Game({Player: this.Player});
 		game.start();
