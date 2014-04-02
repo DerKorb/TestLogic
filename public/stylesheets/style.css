@@ -1,6 +1,55 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    padding: 10px;
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    background: orange;
+    text-align: center;
+}
+
+ul {
+    list-style-type: none;
+    display: inline;
+    width: 1000px;
+}
+
+.gamelobby {
+    border: 1px solid black;
+    text-align: left;
+    list-style-image: none;
+    margin-bottom: 20px;
+    display: inline-block;
+    width: 1000px;
+}
+
+.gamelobby #title {
+    background-color: red;
+    color: darkgreen;
+    padding: 3px;
+    text-align: center;
+}
+
+.gamelobby #buttons {
+    text-align: center;
+}
+
+button {
+    background-color: white;
+    color: black;
+    border: 1px groove gray;
+    font-size: 18px;
+    border-radius: 3px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+h1 {
+
+    font-size: 100px;
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: #fff;
+    background:  -webkit-linear-gradient(top, #6db3f2 0%,#54a3ee 50%,#3690f0 51%,#1e69de 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
 }
 
 a {

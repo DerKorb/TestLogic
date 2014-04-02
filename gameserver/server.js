@@ -63,8 +63,7 @@ var networkObject = function() {
 	this.id = ids[this.type]++;
 	pools[this.type][this.id] = this;
 
-	// Inherit Eventemmiter
-	EE = require('events').EventEmitter;
+	// events
 	var self = this;
 	this._listeners = {};
 	this.on = function(tag, callback) {
@@ -87,20 +86,21 @@ var networkObject = function() {
 		}
 	}
 
-	this.delete = function()
+	// network synchronity:
+	this.delete = function() // DELETE
 	{
 		this.emit("deleted", this);
 		delete pools[this.type][this.id];
 		return {message: "success"};
 	}
 
-	this.set = function(changes) {
+	this.set = function(changes) { // UPDATE
 		for (key in changes)
 			self[key] = changes[key];
 		self.emit("update", changes);
 	}
 
-	this.spawn = function(object, receipients) {
+	this.spawn = function(object, receipients) { // INSERT
 		if (!object.receipients)
 			object.receipients = self.receipients;
 		if (object.isChild)
@@ -114,7 +114,7 @@ var networkObject = function() {
 			}
 			object.on("deleted", this._delete);
 		}
-		this.spawnCast(object);
+		this.emit("spawn", object ? object : this);
 	}
 
 	this._delete = function(object)
@@ -122,17 +122,6 @@ var networkObject = function() {
 		delete self[object.type][object.id]; //todo: singleton;
 	}
 
-	this.removeChild = function(child)
-	{
-		// todo: add singleton removal
-		delete self[child.type][child.id];
-	}
-
-	this.spawnCast = function(object) {
-		if (!object)
-			object = this;
-		this.emit("spawn", object);
-	}
 	this.addListener = function(listener)
 	{
 		if (!this.receipients)

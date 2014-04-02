@@ -8,7 +8,7 @@ exports.Player = function(data) {
 	};
 
 	this.displayModule = "htmlModule";
-	this.template = "li{"+data.playerName+"}";
+	this.template = ".player{"+data.playerName+"}";
 	this.target = "#player_list";
 	this.isChild = true;
 
