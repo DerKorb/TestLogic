@@ -182,6 +182,10 @@ $(function ()
 						createCookie("user", user, 10);
 						createCookie("pwd", pwd, 10);
 					}
+					else
+					{
+						this.Lobby.login({user: getCookie("user"), pwd: getCookie("pwd")});
+					}
 				}
 			}
 		});
