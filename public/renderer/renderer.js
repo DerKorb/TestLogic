@@ -1,7 +1,8 @@
 var materials =
 {
 	lightblue: new THREE.MeshBasicMaterial({color: "lightblue"}),
-	blue: new THREE.MeshBasicMaterial({color: "blue"})
+	blue: new THREE.MeshBasicMaterial({color: "blue"}),
+	red: new THREE.MeshBasicMaterial({color: "red"})
 }
 
 var threeJSModule = function()
@@ -48,7 +49,12 @@ var threeJSModule = function()
 			cylinder.position = this.position;
 			cylinder.position.y+=0.1;
 			this.node.add( cylinder );
-
+		}
+		if (this.cube) {
+			var geometry = new THREE.CubeGeometry( self.cube.w, self.cube.h, self.cube.l);
+			var cylinder = new THREE.Mesh( geometry, materials["lightblue"] );
+			cylinder.position = this.position;
+			this.node.add( cylinder );
 		}
 	}
 
