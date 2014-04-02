@@ -2,7 +2,7 @@ var GameLobby = require("./gamelobby").GameLobby;
 var Player = require("./player").Player;
 var Bla = require("./bla").Bla;
 
-var users = {"DerKorb": "asdfg"};
+var users = {"DerKorb": "asdfg", "patrick": "asdfg"};
 
 Lobby = function() {
 	this.type = "Lobby";
@@ -65,12 +65,6 @@ Lobby.prototype.create = function(options)
 	this.emit("created");
 	return {message: "success"};
 };
-
-Lobby.prototype.addbla = function()
-{
-	this.spawn(new Bla);
-	return {};
-}
 
 Lobby.prototype.join = function(options)
 {
