@@ -7,8 +7,8 @@ var materials =
 var threeJSModule = function()
 {
 	var options = this;
+	var self = this;
 	this.init = function() {
-		var self = this;
 		if (self.canvas && $(self.target)) {
 			this.canvas = $("<div>").css("width", 1000).css("height", 500);
 			this.canvas.addTo = function(target2)
@@ -30,24 +30,30 @@ var threeJSModule = function()
 			this.canvas.append($(this.renderer.domElement));
 			this.node = new THREE.Object3D();
 			this.scene.add(this.node);
+			var geometry = new THREE.CubeGeometry(1,1,1);
+			var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+			var cube = new THREE.Mesh( geometry, material );
+			//self.scene.add( cube );
+			self.renderer.render(self.scene, self.camera);
 			window.setInterval(function()
 			{
-				self.renderer.render(self.scene, self.camera);
 			}, 40);
 		}
 		else
 			this.node = new THREE.Object3D();
 
 		if (this.regular) {
-			var geometry = new THREE.CylinderGeometry( self.regular.radius, self.regular.radius, 2, self.regular.n, 1 );
-			var geometry2 = new THREE.CylinderGeometry( self.regular.radius+0.7, self.regular.radius, 1, self.regular.n, 1 );
+			/*var geometry = new THREE.CylinderGeometry( self.regular.radius, self.regular.radius, 2, self.regular.n, 1 );
 			var cylinder = new THREE.Mesh( geometry, materials["lightblue"] );
-			cylinder.position = this.position;
+			this.node.add( cylinder );*/
+/*			//var geometry2 = new THREE.CylinderGeometry( self.regular.radius+0.7, self.regular.radius, 1, self.regular.n, 1 );
+			//cylinder.position = this.position;
+			//console.log(cylinder);
 			this.node.add( cylinder );
-			cylinder = new THREE.Mesh( geometry2, materials["blue"] );
-			cylinder.position = this.position;
-			cylinder.position.y+=0.1;
-			this.node.add( cylinder );
+			//cylinder = new THREE.Mesh( geometry2, materials["blue"] );
+			//cylinder.position = this.position;
+			//cylinder.position.y+=0.1;
+			//this.node.add( cylinder );*/
 
 		}
 	}

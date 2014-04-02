@@ -14,8 +14,8 @@ Game = function(options) {
 
 Game.prototype.start = function()
 {
-	for (var x = -12; x<13; x++)
-		for (var z = -12; z<13; z++)
+	for (var x = -2; x<3; x++)
+		for (var z = -2; z<3; z++)
 			this.spawn(new Tile({position: {x: x*18+(z%2?9:0), y: 0, z: z*16}}));
 }
 
